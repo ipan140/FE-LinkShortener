@@ -1,0 +1,54 @@
+---
+title: "REST API Reference"
+description: "Comprehensive endpoints list, request schemas, parameters, and HTTP responses."
+category: "API Reference"
+order: 1
+tags: ["api", "rest", "endpoints", "schema"]
+tableOfContents: true
+---
+
+# REST API Reference
+
+All REST endpoints are prefixed with `/api/v1` except for top-level redirect paths, QR codes, and telemetry endpoints.
+
+---
+
+## Endpoint Overview
+
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/{code}` | Public | Ultra-fast redirection (sub-10ms) |
+| `POST` | `/{code}` | Public | Submit password for protected links |
+| `GET` | `/qr/{code}` | Public | Generate high-res QR code PNG |
+| `POST` | `/api/v1/links/public` | Public | Create shortlink without registration |
+| `GET` | `/api/v1/analytics/public/{code}` | Public | Public visitor statistics summary |
+| `POST` | `/api/v1/auth/register` | Public | Register new user account |
+| `POST` | `/api/v1/auth/login` | Public | Authenticate & obtain JWT / API key |
+| `POST` | `/api/v1/auth/api-key/regenerate` | Protected | Rotate user API key |
+| `POST` | `/api/v1/links` | Protected | Create authenticated link |
+| `GET` | `/api/v1/links` | Protected | List user links (filterable by tag) |
+| `GET` | `/api/v1/analytics/{code}` | Protected | Detailed analytics |
+| `GET` | `/api/v1/analytics/{code}/export.csv` | Protected | Export click log CSV |
+| `GET` | `/metrics` | Public | Prometheus scrape exposition |
+| `GET` | `/health` | Public | Health probe |
+
+---
+
+## Create Link Request Schema
+
+```json
+{
+  "original_url": "https://example.com/target",
+  "custom_code": "my-code",
+  "title": "Campaign Name",
+  "ios_url": "https://apps.apple.com/app/id123",
+  "android_url": "https://play.google.com/store/apps/details?id=com.app",
+  "country_code": "ID",
+  "country_url": "https://example.com/id",
+  "fallback_url": "https://example.com/fallback",
+  "webhook_url": "https://discord.com/api/webhooks/...",
+  "max_clicks": 1000,
+  "expires_at": "2026-12-31T23:59:59Z",
+  "password": "optional-secret"
+}
+```

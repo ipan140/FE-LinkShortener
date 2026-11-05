@@ -1,0 +1,48 @@
+---
+title: "Geo-Location Country Targeting"
+description: "Direct visitors to localized landing pages based on their country of origin."
+category: "Features & Routing"
+order: 2
+tags: ["geo", "country-routing", "cloudflare", "localization"]
+tableOfContents: true
+---
+
+# Geo-Location Country Targeting
+
+Geo-Location Targeting allows marketing teams to direct visitors from specific countries to localized landing pages or language-specific checkout funnels using a single short URL.
+
+---
+
+## Detection Mechanism
+
+The engine extracts the visitor's geographic origin with zero latency by inspecting edge proxy headers in priority order:
+1. `CF-IPCountry` (Cloudflare edge header)
+2. `X-Country-Code` (Custom reverse proxy header)
+3. `X-Country`
+
+If the detected 2-letter ISO country code matches `country_code`, the visitor is redirected to `country_url`. Otherwise, they are routed to the global `original_url`.
+
+---
+
+## Setting up Country Routing
+
+```json
+{
+  "original_url": "https://global.brand.com/promo",
+  "country_code": "ID",
+  "country_url": "https://id.brand.com/promo-indonesia",
+  "custom_code": "summer-promo"
+}
+```
+
+### Testing with Headers
+
+```bash
+# Traffic from Indonesia:
+curl -I -H "CF-IPCountry: ID" http://localhost:8080/summer-promo
+# Output -> Location: https://id.brand.com/promo-indonesia
+
+# Traffic from anywhere else (e.g. United States):
+curl -I -H "CF-IPCountry: US" http://localhost:8080/summer-promo
+# Output -> Location: https://global.brand.com/promo
+```

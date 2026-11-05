@@ -1,0 +1,89 @@
+---
+title: "Quick Start Guide"
+description: "How to generate ultra-fast shortened links, test redirects, and inspect visitor telemetry."
+category: "Getting Started"
+order: 2
+tags: ["quickstart", "shorten", "curl", "qr-code"]
+tableOfContents: true
+---
+
+# Quick Start Guide
+
+This guide walks you through generating a shortened URL, testing ultra-fast redirection, and viewing live click statistics.
+
+---
+
+## 1. Creating a Shortlink via Web UI
+
+Navigate to the homepage [http://localhost:8080/](http://localhost:8080/) or the dev server [http://localhost:4321/](http://localhost:4321/):
+
+1. **Destination URL**: Paste your target URL (e.g. `https://example.com/checkout`).
+2. **Custom Alias** *(optional)*: Input a branded slug (e.g. `promo2026`).
+3. Click **"Shorten URL Now"**.
+4. Your shortened URL is generated instantly! You can copy the link, open it in a new tab, or download the QR Code PNG.
+
+---
+
+## 2. Creating a Shortlink via REST API
+
+You can also create short links programmatically via `curl` without requiring authentication using the public endpoint:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/links/public \
+  -H "Content-Type: application/json" \
+  -d '{
+    "original_url": "https://example.com/products/sale",
+    "custom_code": "flash-deal",
+    "title": "Black Friday Sale"
+  }'
+```
+
+### JSON Response
+
+```json
+{
+  "success": true,
+  "message": "short link created successfully",
+  "data": {
+    "id": 1,
+    "original_url": "https://example.com/products/sale",
+    "short_code": "flash-deal",
+    "short_url": "http://localhost:8080/flash-deal",
+    "title": "Black Friday Sale",
+    "is_active": true,
+    "click_count": 0,
+    "is_protected": false
+  }
+}
+```
+
+---
+
+## 3. Testing Redirection (under 10ms)
+
+Test the redirection in your terminal using `curl -I`:
+
+```bash
+curl -I http://localhost:8080/flash-deal
+```
+
+```http
+HTTP/1.1 302 Found
+Location: https://example.com/products/sale
+Date: Thu, 05 Nov 2026 10:00:00 GMT
+```
+
+> **UTM Parameter Forwarding**: Any query parameters appended to the shortlink (e.g. `http://localhost:8080/flash-deal?utm_source=twitter&utm_medium=cpc`) are automatically preserved and forwarded to the destination URL.
+
+---
+
+## 4. Downloading the QR Code
+
+Every link automatically has an associated high-resolution QR code endpoint at `/qr/{code}`:
+
+```html
+<img src="http://localhost:8080/qr/flash-deal" alt="QR Code" width="256" />
+```
+
+Or query with custom pixel dimensions:
+`GET http://localhost:8080/qr/flash-deal?size=512`

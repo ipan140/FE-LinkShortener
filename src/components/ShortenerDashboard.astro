@@ -289,10 +289,318 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
     </div>
+
+    <!-- DOCUMENTATION & ARCHITECTURAL GUIDES SHOWCASE -->
+    <div id="docs-guide" class="mt-16 pt-12 border-t border-slate-800" x-data="docTabs()">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-3">
+          <span>📚 Integrated System Documentation</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+          How UltraFast Redirector Works
+        </h2>
+        <p class="text-slate-400 text-sm mt-2">
+          Explore the underlying 5-layer Go Clean Architecture, in-memory Redis caching, and real-time telemetry pipeline.
+        </p>
+
+        <!-- Feature Guide Tabs -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
+          <button type="button" @click="activeDocTab = 'architecture'"
+            :class="activeDocTab === 'architecture' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+            ⚡ &lt;10ms SLA & Redis
+          </button>
+          <button type="button" @click="activeDocTab = 'routing'"
+            :class="activeDocTab === 'routing' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+            📱 Device & Geo Routing
+          </button>
+          <button type="button" @click="activeDocTab = 'fallback'"
+            :class="activeDocTab === 'fallback' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+            🛡️ Fallback URL & Limits
+          </button>
+          <button type="button" @click="activeDocTab = 'webhooks'"
+            :class="activeDocTab === 'webhooks' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+            🔔 Webhooks (Discord/Slack/TG)
+          </button>
+          <button type="button" @click="activeDocTab = 'observability'"
+            :class="activeDocTab === 'observability' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+            class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
+            📈 Prometheus & Swagger
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Architecture -->
+      <div x-show="activeDocTab === 'architecture'" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Ultra-Fast Redirection Engine</span>
+            <h3 class="text-xl font-bold text-white">Sub-10ms In-Memory Redis Caching</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              When a visitor requests a shortened link, the server first queries the in-memory Redis cache. If found, it immediately responds with an <code>HTTP 302 Found</code> in less than 1ms.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-400">
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span><strong>Fast Path:</strong> Redis cache returns destination URL with zero database overhead.</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                <span><strong>Non-Blocking Telemetry:</strong> Clicks are enqueued asynchronously without delaying the user redirect.</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                <span><strong>DB Fallback:</strong> If Redis is restarting, direct PostgreSQL fallback guarantees 100% uptime.</span>
+              </li>
+            </ul>
+            <div class="pt-2">
+              <a href="/docs/getting-started/welcome" class="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                <span>Read Full Architecture Guide</span> &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+            <div class="text-slate-500 border-b border-slate-800 pb-2 flex justify-between items-center">
+              <span>Redirect Execution Benchmark</span>
+              <span class="text-emerald-400 font-bold">PASS &lt;10ms</span>
+            </div>
+            <div class="text-sky-400">1. GET /flash-sale HTTP/1.1</div>
+            <div class="text-slate-400 pl-4">&rarr; Redis Key: redirect:url:flash-sale (HIT: 0.42ms)</div>
+            <div class="text-slate-400 pl-4">&rarr; Enqueue Click Telemetry (Async: 0.15ms)</div>
+            <div class="text-emerald-400 pl-4">&rarr; HTTP/1.1 302 Found (Total: 0.88ms)</div>
+            <div class="text-slate-500 border-t border-slate-800 pt-2 text-[11px]">
+              Location: https://example.com/checkout?utm_source=twitter
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Smart Routing -->
+      <div x-show="activeDocTab === 'routing'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Smart Traffic Splitting</span>
+            <h3 class="text-xl font-bold text-white">Device Deep-Linking & Country Targeting</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Use a single short URL across marketing campaigns. The engine automatically inspects the visitor's User-Agent and Cloudflare Geo-IP header:
+            </p>
+            <div class="space-y-2 text-xs">
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                <span class="text-sky-400 font-bold">iOS Traffic:</span> Redirects directly to the Apple App Store (<code>ios_url</code>).
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                <span class="text-emerald-400 font-bold">Android Traffic:</span> Redirects directly to Google Play Store (<code>android_url</code>).
+              </div>
+              <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                <span class="text-indigo-400 font-bold">Country Match:</span> Visitors from target country code (e.g. <code>ID</code>) go to localized URL (<code>country_url</code>).
+              </div>
+            </div>
+            <div class="pt-2">
+              <a href="/docs/features/device-routing" class="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                <span>Read Smart Device Routing Guide</span> &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-3">
+            <div class="text-slate-500 border-b border-slate-800 pb-2">Sample Request with Headers</div>
+            <div class="text-amber-400">curl -I -H "CF-IPCountry: ID" \<br/>&nbsp;&nbsp;-A "Mozilla/5.0 (iPhone...)" \<br/>&nbsp;&nbsp;http://localhost:8080/app</div>
+            <div class="text-slate-400 border-t border-slate-800 pt-2 text-[11px] space-y-1">
+              <div>HTTP/1.1 302 Found</div>
+              <div class="text-emerald-400">Location: https://apps.apple.com/app/id12345</div>
+              <div class="text-slate-500">Vary: Origin</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Fallback & Limits -->
+      <div x-show="activeDocTab === 'fallback'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider block">Zero Broken Links</span>
+            <h3 class="text-xl font-bold text-white">Custom Fallback URLs & Quota Controls</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Never lose customer conversions to expired links or exhausted promo quotas. Define a <code>fallback_url</code> and your visitors are automatically routed to a live alternative page.
+            </p>
+            <ul class="space-y-2 text-xs text-slate-400">
+              <li>&bull; <strong>Max Clicks Quota:</strong> Cap campaign clicks at exact thresholds (e.g. 500 redemptions).</li>
+              <li>&bull; <strong>Expiration Date:</strong> Set automatic link expiration with date-time precision.</li>
+              <li>&bull; <strong>Password Gates:</strong> Protect sensitive internal URLs with encrypted bcrypt password validation.</li>
+            </ul>
+            <div class="pt-2">
+              <a href="/docs/features/fallback-urls" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                <span>Read Custom Fallback Guide</span> &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 space-y-2">
+            <div class="text-slate-500 border-b border-slate-800 pb-2">Fallback Lifecycle Behavior</div>
+            <div class="text-slate-400">Clicks 1-500: &rarr; <span class="text-emerald-400">https://brand.com/special-offer</span></div>
+            <div class="text-amber-400">Click 501+ (Limit Hit):</div>
+            <div class="text-sky-400 pl-4">&rarr; Smooth 302 Redirect to fallback_url</div>
+            <div class="text-slate-400 pl-4">&rarr; <span class="text-sky-300">https://brand.com/evergreen-catalog</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Webhooks -->
+      <div x-show="activeDocTab === 'webhooks'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Automated Notifications</span>
+            <h3 class="text-xl font-bold text-white">Discord, Slack & Telegram Milestone Webhooks</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Receive instant alerts whenever your link achieves significant traffic milestones (10, 50, 100, 500, 1,000, 5,000, 10,000 clicks) or when its quota expires.
+            </p>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <span class="px-2.5 py-1 rounded-md bg-[#5865F2]/20 border border-[#5865F2]/40 text-[#5865F2] font-semibold">Discord Embeds</span>
+              <span class="px-2.5 py-1 rounded-md bg-[#4A154B]/20 border border-[#4A154B]/40 text-purple-300 font-semibold">Slack Block Kit</span>
+              <span class="px-2.5 py-1 rounded-md bg-[#229ED9]/20 border border-[#229ED9]/40 text-[#229ED9] font-semibold">Telegram Bot</span>
+              <span class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 font-semibold">Custom REST</span>
+            </div>
+            <div class="pt-2">
+              <a href="/docs/guides/webhooks-integration" class="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                <span>Read Webhook Integration Guide</span> &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 text-xs space-y-2">
+            <div class="text-slate-500 border-b border-slate-800 pb-2 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+              <span>Discord Native Embed Preview</span>
+            </div>
+            <div class="border-l-4 border-sky-400 pl-3 py-1 space-y-1">
+              <div class="font-bold text-white text-xs">📈 Milestone Reached (/promo)</div>
+              <div class="text-[11px] text-slate-400">Shortlink <strong>Black Friday Promo</strong> hit 1,000 total clicks.</div>
+              <div class="flex gap-4 text-[10px] text-slate-300 pt-1">
+                <span><strong>Short Code:</strong> <code>/promo</code></span>
+                <span><strong>Clicks:</strong> <code>1,000</code></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 5: Observability -->
+      <div x-show="activeDocTab === 'observability'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block">Production Monitoring</span>
+            <h3 class="text-xl font-bold text-white">Prometheus Telemetry & Swagger OpenAPI</h3>
+            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Gain full transparency into redirect volume, latency histograms (sub-second buckets), and cache hit ratios.
+            </p>
+            <div class="flex items-center gap-3 pt-2">
+              <a href={swaggerUrl} target="_blank" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white transition flex items-center gap-1.5">
+                <span>Explore Swagger UI</span> &rarr;
+              </a>
+              <a href={metricsUrl} target="_blank" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 transition flex items-center gap-1.5">
+                <span>View Prometheus Metrics</span> &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 font-mono text-[11px] text-slate-300 space-y-1.5">
+            <div class="text-slate-500 border-b border-slate-800 pb-1.5">Scrape Endpoint: /metrics</div>
+            <div class="text-amber-400"># HELP redirector_redirect_duration_seconds</div>
+            <div class="text-slate-400">redirector_redirect_duration_seconds_bucket&#123;le="0.001"&#125; 1420</div>
+            <div class="text-slate-400">redirector_redirect_duration_seconds_bucket&#123;le="0.005"&#125; 1480</div>
+            <div class="text-emerald-400">redirector_redirect_duration_seconds_bucket&#123;le="0.010"&#125; 1500</div>
+            <div class="text-sky-400">redirector_redirects_total&#123;status="hit_cache"&#125; 1380</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE CODE SNIPPETS -->
+      <div class="mt-12 bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-800">
+          <div>
+            <h3 class="text-base font-bold text-white">Programmatic API Snippets</h3>
+            <p class="text-xs text-slate-400">Integrate UltraFast Shortener into your frontend or backend workflow.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button type="button" @click="activeSnippetTab = 'curl'"
+              :class="activeSnippetTab === 'curl' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+              class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
+              cURL
+            </button>
+            <button type="button" @click="activeSnippetTab = 'js'"
+              :class="activeSnippetTab === 'js' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+              class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
+              JavaScript
+            </button>
+            <button type="button" @click="activeSnippetTab = 'go'"
+              :class="activeSnippetTab === 'go' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+              class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
+              Go
+            </button>
+          </div>
+        </div>
+
+        <!-- Snippet cURL -->
+        <div x-show="activeSnippetTab === 'curl'" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+          <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>curl -X POST http://localhost:8080/api/v1/links/public \
+  -H "Content-Type: application/json" \
+  -d '{
+    "original_url": "https://example.com/checkout",
+    "custom_code": "flash-deal",
+    "country_code": "ID",
+    "country_url": "https://example.com/id/checkout",
+    "ios_url": "https://apps.apple.com/app/id123",
+    "android_url": "https://play.google.com/store/apps/details?id=com.app",
+    "fallback_url": "https://example.com/expired",
+    "max_clicks": 1000
+  }'</code></pre>
+        </div>
+
+        <!-- Snippet JS -->
+        <div x-show="activeSnippetTab === 'js'" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+          <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>const res = await fetch('http://localhost:8080/api/v1/links/public', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    original_url: 'https://example.com/checkout',
+    custom_code: 'flash-deal',
+    fallback_url: 'https://example.com/expired'
+  })
+});
+const { data } = await res.json();
+console.log('Short URL:', data.short_url);</code></pre>
+        </div>
+
+        <!-- Snippet Go -->
+        <div x-show="activeSnippetTab === 'go'" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+          <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>reqBody, _ := json.Marshal(map[string]any{
+    "original_url": "https://example.com/checkout",
+    "custom_code":  "flash-deal",
+})
+resp, err := http.Post("http://localhost:8080/api/v1/links/public", "application/json", bytes.NewBuffer(reqBody))
+if err == nil {
+    defer resp.Body.Close()
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    </div>
   </div>
 </section>
 
 <script is:inline>
+  function docTabs() {
+    return {
+      activeDocTab: 'architecture',
+      activeSnippetTab: 'curl'
+    };
+  }
+
   const shortenerEl = document.getElementById('shortener');
   const configuredApi = shortenerEl ? shortenerEl.getAttribute('data-api-base') : '';
   const API_BASE = (configuredApi || (window.location.port === '4321' ? 'http://localhost:8080' : '')).replace(/\/+$/, '');

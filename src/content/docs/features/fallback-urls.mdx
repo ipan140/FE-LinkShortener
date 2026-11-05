@@ -1,0 +1,42 @@
+---
+title: "Custom Fallback URLs"
+description: "Gracefully redirect visitors to an alternative URL when links expire or reach click quotas."
+category: "Features & Routing"
+order: 3
+tags: ["fallback", "expiration", "quota", "resilience"]
+tableOfContents: true
+---
+
+# Custom Fallback URLs
+
+In traditional shortener tools, clicking an expired link or a link that ran out of click quota results in a cold `404 Not Found` or `400 Link Expired` error screen.
+
+With **UltraFast Shortener**, you can define a `fallback_url`. When the link expires or its maximum click count is reached, the visitor is smoothly redirected (`HTTP 302`) to the fallback destination instead of seeing an error.
+
+---
+
+## Use Cases
+
+- **Time-Limited Flash Sales**: Once the sale ends (`expires_at`), automatically redirect visitors to your main shop catalog.
+- **Quota-Limited Promo Codes**: After 500 clicks (`max_clicks: 500`), forward new visitors to a "Waitlist" or alternative offer.
+- **Campaign Deactivation**: If a link is marked `is_active: false`, send visitors to your homepage rather than a broken link.
+
+---
+
+## Configuration Example
+
+```json
+{
+  "original_url": "https://brand.com/special-50-percent-off",
+  "fallback_url": "https://brand.com/evergreen-catalog",
+  "max_clicks": 100,
+  "custom_code": "flash50"
+}
+```
+
+When click #101 arrives:
+```http
+HTTP/1.1 302 Found
+Location: https://brand.com/evergreen-catalog
+```
+All UTM tags from the original incoming request are forwarded to the fallback URL!

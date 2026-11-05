@@ -1,40 +1,80 @@
 ---
-title: "Welcome to the Docs"
-description: "An introduction to this documentation site and how to navigate it effectively."
+title: "Welcome to UltraFast Link Shortener"
+description: "High-performance modular monolith URL redirector & click collector engineered in Go with PostgreSQL and Redis."
 category: "Getting Started"
 order: 1
-publishedDate: 2026-01-01
-lastUpdated: 2026-01-01
-tags: ["introduction", "overview"]
-author: "Documentation Team"
+tags: ["overview", "architecture", "redis", "postgresql"]
 tableOfContents: true
 ---
 
-## Welcome
+# UltraFast Link Shortener & Telemetry Engine
 
-Welcome to the documentation! This site is your central resource for guides, tutorials, and reference material. Whether you are just getting started or looking for advanced configuration details, you will find everything you need here.
+Welcome to the **UltraFast Link Shortener**, an enterprise-grade URL redirection and click telemetry platform built with a **5-layer Clean Layered Architecture** in Go.
 
-## How to Navigate
+It is designed to handle high-concurrency traffic with a **sub-10ms redirection SLA** using in-memory Redis caching, while asynchronously recording rich visitor telemetry into PostgreSQL.
 
-Use the **sidebar** on the left to browse articles by category. On desktop, you will also see a **table of contents** on the right side of each article for quick navigation within a page.
+---
 
-### Search
+## ⚡ Key Highlights
 
-The **search bar** at the top of every page lets you find articles instantly. It uses full-text search in production builds and a JSON-based fallback during development.
+- **Sub-10ms Redirection**: Direct Redis cache lookup evaluates incoming requests and responds immediately with `HTTP 302 Found`.
+- **Smart Device Routing**: Detects iOS, Android, and Desktop user agents, redirecting visitors to their native app store or app URL.
+- **Geo-Location Targeting**: Directs visitors to country-specific landing pages (e.g. `ID` &rarr; Indonesian site, `US` &rarr; Global site) using Cloudflare headers.
+- **Custom Fallback URLs**: Automatically routes visitors to an alternative URL when links expire or reach click quotas, eliminating broken links.
+- **Multi-Platform Webhooks**: Automatically dispatches alerts to **Discord** (rich embeds), **Slack** (Block Kit), **Telegram** (bot messages), or custom HTTP endpoints upon reaching click milestones.
+- **Observability**: Built-in Prometheus metrics at `/metrics` with p95/p99 latency histograms and Swagger OpenAPI documentation at `/swagger/index.html`.
 
-### Categories
+---
 
-Content is organized into the following categories:
+## 🏗️ Architecture Overview
 
-- **Getting Started** — Installation, setup, and first steps.
-- **Guides** — Step-by-step walkthroughs for common tasks.
-- **Features** — Details on what this site offers out of the box.
-- **Reference** — Technical specifications and configuration options.
+The backend is built as a **Modular Monolith** divided into distinct domain packages:
 
-## What's Next?
+```
+app/modules/
+├── auth/        # User management, JWT token issuance & API Keys
+├── link/        # Shortlink CRUD, Base62 code generation & QR generator
+├── redirect/    # Ultra-fast cache lookup, device/geo routing & fallback
+├── analytics/   # Asynchronous queue worker, visitor demographics & CSV export
+└── web/         # Astro Frontend static serving & dashboard
+```
 
-If this is your first time here, start with the [Installation](/docs/getting-started/installation) guide to get up and running. Then explore the [Configuration](/docs/getting-started/configuration) article to customize the site for your needs.
+Each module strictly follows the **5-Layer Clean Architecture**:
+1. `model.go` &mdash; Database schema and request/response DTOs
+2. `repository.go` &mdash; Database queries via GORM (PostgreSQL)
+3. `redis.go` &mdash; Redis cache lookup, invalidation & event queueing
+4. `service.go` &mdash; Business logic, validation, and domain orchestration
+5. `handler.go` & `route.go` &mdash; HTTP presentation layer powered by Echo v4
 
-## Need Help?
+---
 
-If you cannot find what you are looking for, try using the search bar or browse the categories in the sidebar. You can also check the [Deployment](/docs/reference/deployment) guide when you are ready to go live.
+## 🔄 The Redirection Flow
+
+When a visitor accesses `http://localhost:8080/{short_code}`:
+
+```mermaid
+flowchart TD
+    A[Visitor Request /code] --> B{In Redis Cache?}
+    B -- Yes (sub-millisecond) --> C[Forward UTM params & Return 302]
+    B -- No / Miss --> D[Query PostgreSQL DB]
+    D --> E{Link Active & Not Expired?}
+    E -- No --> F{Fallback URL Defined?}
+    F -- Yes --> G[Redirect 302 to Fallback URL]
+    F -- No --> H[Render Dark HTML Error Page]
+    E -- Yes --> I{Geo or Device Rule?}
+    I -- Match --> J[Select Device/Geo Target URL]
+    I -- None --> K[Select Original URL]
+    J --> L[Warm Redis Cache & Return 302]
+    K --> L
+    C -.-> M[Async Redis Event Queue]
+    L -.-> M
+    M -.-> N[Background Collector Worker -> PostgreSQL Click Log]
+```
+
+---
+
+## Next Steps
+
+- Proceed to the [Quick Start Guide](/docs/getting-started/quick-start) to create your first shortlink.
+- Check [Smart Device Routing](/docs/features/device-routing) to configure iOS and Android app redirects.
+- Explore the [API Reference](/docs/reference/api-reference) for programmatic integration.

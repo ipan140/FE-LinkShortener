@@ -48,11 +48,10 @@ interface Category {
 
 const allCategories = Object.values(categoriesMap) as Category[];
 const categoryOrder = [
-  "Basic",
-  "Email Piping",
-  "Integration",
-  "Knowledge Base",
-  "FAQs",
+  "Getting Started",
+  "Features & Routing",
+  "Webhooks & Telemetry",
+  "API Reference",
 ];
 const sortedCategories = [...allCategories].sort((a, b) => {
   const ai = categoryOrder.indexOf(a.title);
@@ -141,10 +140,10 @@ const popularArticles = allDocs.slice(0, 5).map((doc) => ({
 }));
 
 const categoryDescriptions: Record<string, string> = {
-  "Getting Started": "Installation, setup, and first steps to get your documentation site up and running.",
-  "Guides": "Step-by-step walkthroughs for writing content, adding images, and customizing the theme.",
-  "Features": "Details on built-in features including search, SEO, categories, and navigation.",
-  "Reference": "Technical reference for frontmatter schema, project structure, and deployment.",
+  "Getting Started": "Architecture overview, quickstart guides, and API authentication.",
+  "Features & Routing": "Smart Device Routing, Country Geo-Targeting, Fallback URLs, and Password Gates.",
+  "Webhooks & Telemetry": "Milestone webhook alerts for Discord, Slack, Telegram, and Prometheus telemetry.",
+  "API Reference": "Comprehensive REST endpoints, payload schemas, and OpenAPI Swagger documentation.",
 };
 ---
 

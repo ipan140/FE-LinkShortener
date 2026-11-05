@@ -1,0 +1,54 @@
+---
+title: "Smart Device Routing (iOS / Android / Desktop)"
+description: "Route mobile visitors directly to native Apple App Store or Google Play Store links."
+category: "Features & Routing"
+order: 1
+tags: ["device-routing", "ios", "android", "deep-linking"]
+tableOfContents: true
+---
+
+# Smart Device Routing
+
+Smart Device Routing allows a single short link to intelligently route visitors based on their operating system.
+
+---
+
+## How It Works
+
+When a visitor opens a link:
+1. The redirector engine inspects the incoming `User-Agent` header using high-performance string matching.
+2. If the user is on **iOS** (iPhone, iPad) and `ios_url` is configured &rarr; Redirects to `ios_url`.
+3. If the user is on **Android** and `android_url` is configured &rarr; Redirects to `android_url`.
+4. All other platforms (Windows, macOS, Linux desktop) &rarr; Redirects to `original_url`.
+
+---
+
+## Configuration Example
+
+```json
+{
+  "original_url": "https://myapp.com/web",
+  "ios_url": "https://apps.apple.com/app/myapp/id123456789",
+  "android_url": "https://play.google.com/store/apps/details?id=com.myapp",
+  "custom_code": "download-app"
+}
+```
+
+### Verification via Terminal
+
+```bash
+# Simulating an iPhone visitor:
+curl -I -A "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)" \
+  http://localhost:8080/download-app
+# Response -> Location: https://apps.apple.com/app/myapp/id123456789
+
+# Simulating an Android visitor:
+curl -I -A "Mozilla/5.0 (Linux; Android 14; Pixel 8)" \
+  http://localhost:8080/download-app
+# Response -> Location: https://play.google.com/store/apps/details?id=com.myapp
+
+# Simulating Desktop Chrome:
+curl -I -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0" \
+  http://localhost:8080/download-app
+# Response -> Location: https://myapp.com/web
+```

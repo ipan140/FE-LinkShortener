@@ -1,0 +1,55 @@
+---
+title: "Password Protection & Click Quotas"
+description: "Protect sensitive links with bcrypt passwords and cap clicks with maximum quotas."
+category: "Features & Routing"
+order: 4
+tags: ["password", "limits", "security", "quota"]
+tableOfContents: true
+---
+
+# Password Protection & Click Quotas
+
+UltraFast Shortener provides native security mechanisms to protect private URLs and prevent link scraping.
+
+---
+
+## 1. Password Protected Links
+
+When creating a link with a `password` parameter:
+- The password is encrypted in PostgreSQL using industry-standard **bcrypt** hashing.
+- Visitors without the password are presented with a responsive, dark-mode password prompt landing page.
+- Once entered, the backend verifies the hash and redirects the visitor.
+
+### Creating via API
+
+```bash
+curl -X POST http://localhost:8080/api/v1/links/public \
+  -H "Content-Type: application/json" \
+  -d '{
+    "original_url": "https://confidential.docs.internal",
+    "password": "InternalSecret2026",
+    "custom_code": "secret-report"
+  }'
+```
+
+### Passing Password via URL Parameter
+
+Authorized automated clients can bypass the HTML prompt by passing `?p=...`:
+`http://localhost:8080/secret-report?p=InternalSecret2026`
+
+---
+
+## 2. Maximum Click Quota (`max_clicks`)
+
+Set an exact cap on how many times a link may be accessed:
+
+```json
+{
+  "original_url": "https://promo.deal",
+  "max_clicks": 50
+}
+```
+
+Once `click_count >= max_clicks`:
+- If `fallback_url` is defined &rarr; visitor redirects to fallback URL.
+- Otherwise &rarr; visitor sees a sleek "Quota Exceeded" notice.

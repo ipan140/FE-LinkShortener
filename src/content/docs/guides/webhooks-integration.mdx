@@ -1,0 +1,67 @@
+---
+title: "Multi-Platform Webhook Integrations"
+description: "Send automated milestone alerts to Discord, Slack, Telegram, or custom REST webhooks."
+category: "Webhooks & Telemetry"
+order: 1
+tags: ["webhooks", "discord", "slack", "telegram"]
+tableOfContents: true
+---
+
+# Multi-Platform Webhook Integrations
+
+When an active shortlink reaches click milestones (such as 10, 50, 100, 500, 1,000, 5,000, 10,000 clicks) or reaches its maximum click quota, the backend can automatically dispatch rich notifications to your team's communication channels.
+
+---
+
+## Supported Webhook Destinations
+
+1. **Discord**: Formatted automatically with rich embeds, color codes (sky blue for milestones, red for quota limits), and clickable fields.
+2. **Slack**: Formatted natively using Slack's Block Kit (`mrkdwn` sections).
+3. **Telegram**: Dispatched via Telegram Bot API with Markdown formatting.
+4. **Custom REST**: Standard JSON payload with custom HTTP headers (`X-Event-Type`, `X-Short-Code`, `X-Timestamp`).
+
+---
+
+## 1. Discord Webhooks
+
+Paste your Discord channel webhook URL into `webhook_url`:
+`https://discord.com/api/webhooks/1234567890/token`
+
+The notification renders an embed:
+- **Title**: `📈 Event: milestone reached (/flash-sale)`
+- **Short Code**: `/flash-sale`
+- **Total Clicks**: `1,000`
+- **Destination**: `https://example.com/checkout`
+
+---
+
+## 2. Slack Webhooks
+
+Paste your Slack Incoming Webhook URL:
+`https://hooks.slack.com/services/T00/B00/XXXX`
+
+The message posts directly into your configured channel with milestone details.
+
+---
+
+## 3. Telegram Bot Notifications
+
+Provide your Telegram Bot webhook URL including the `chat_id`:
+`https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<CHAT_ID>`
+
+---
+
+## 4. Custom REST Webhook Payload
+
+If you supply any other HTTP/HTTPS URL, the backend sends a standard POST request:
+
+```json
+{
+  "event": "milestone_reached",
+  "short_code": "summer-drop",
+  "title": "Summer Collection Drop",
+  "original_url": "https://store.com/summer",
+  "total_clicks": 500,
+  "timestamp": "2026-11-05T10:00:00Z"
+}
+```

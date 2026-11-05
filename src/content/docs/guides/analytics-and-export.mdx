@@ -1,0 +1,68 @@
+---
+title: "Visitor Telemetry & CSV Export"
+description: "Inspect aggregated visitor metrics, device breakdowns, and export full raw click logs."
+category: "Webhooks & Telemetry"
+order: 2
+tags: ["analytics", "csv", "telemetry", "export"]
+tableOfContents: true
+---
+
+# Visitor Telemetry & CSV Export
+
+Every click that passes through the redirector records non-blocking telemetry:
+- **IP Address & Geolocation** (Country, City)
+- **User Agent Breakdown** (Device Type, Browser, Operating System)
+- **Referrer URL** (Where the traffic originated from)
+- **Forwarded Query Parameters** (UTM source, campaign, medium)
+
+---
+
+## 1. Inspecting Analytics via Web UI
+
+Enter any shortcode into the **Analytics Explorer** on the homepage to view:
+- **Total Clicks & Unique Visitors**
+- **Device Breakdown** (Desktop, Mobile, Tablet, Bot)
+- **Top Geographic Locations**
+- **Download Click Telemetry (CSV)** button
+
+---
+
+## 2. Public Analytics Endpoint
+
+Retrieve aggregated statistics in JSON format:
+
+```bash
+curl http://localhost:8080/api/v1/analytics/public/flash-sale
+```
+
+```json
+{
+  "success": true,
+  "data": {
+    "short_code": "flash-sale",
+    "total_clicks": 1420,
+    "unique_visitors": 1105,
+    "devices": [
+      { "name": "mobile", "count": 920 },
+      { "name": "desktop", "count": 500 }
+    ],
+    "top_countries": [
+      { "name": "ID", "count": 890 },
+      { "name": "US", "count": 310 }
+    ]
+  }
+}
+```
+
+---
+
+## 3. Raw CSV Export
+
+Download the complete click audit log as a CSV spreadsheet:
+
+```bash
+curl -O http://localhost:8080/api/v1/analytics/flash-sale/export.csv
+```
+
+CSV columns include:
+`ID`, `ShortCode`, `ClickedAt (UTC)`, `IP`, `Country`, `City`, `DeviceType`, `Browser`, `OS`, `Referrer`.

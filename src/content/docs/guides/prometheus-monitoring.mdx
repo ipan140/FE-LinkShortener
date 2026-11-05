@@ -1,0 +1,59 @@
+---
+title: "Prometheus Metrics & Observability"
+description: "Monitor p95/p99 latency histograms, cache hit rates, and redirects in Grafana."
+category: "Webhooks & Telemetry"
+order: 3
+tags: ["prometheus", "grafana", "metrics", "latency"]
+tableOfContents: true
+---
+
+# Prometheus Metrics & Observability
+
+The backend exposes native Prometheus metrics at `http://localhost:8080/metrics` to monitor traffic volume, latency SLA compliance, and system health.
+
+---
+
+## 1. Key Metrics
+
+- `redirector_redirects_total`: Total redirects labeled by status (`hit_cache`, `hit_db`, `not_found`, `expired`, `limit_reached`).
+- `redirector_redirect_duration_seconds`: Histogram measuring redirect latency in seconds.
+
+### Latency Histogram Buckets
+
+Configured with high-resolution sub-second buckets to verify the `<10ms` SLA:
+`0.0005s` (0.5ms), `0.001s` (1ms), `0.002s` (2ms), `0.005s` (5ms), `0.010s` (10ms SLA threshold), up to `1.0s`.
+
+---
+
+## 2. Scraping in Prometheus
+
+Add the job configuration to your `prometheus.yml`:
+
+```yaml
+scrape_configs:
+  - job_name: "ultra-fast-redirector"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["localhost:8080"]
+```
+
+---
+
+## 3. Useful PromQL Queries
+
+### Request Rate (Redirects per Second)
+```promql
+sum(rate(redirector_redirects_total[1m]))
+```
+
+### 99th Percentile Redirect Latency
+```promql
+histogram_quantile(0.99, sum(rate(redirector_redirect_duration_seconds_bucket[5m])) by (le))
+```
+
+### Cache Hit Ratio
+```promql
+sum(rate(redirector_redirects_total{status="hit_cache"}[5m])) 
+/ 
+sum(rate(redirector_redirects_total[5m])) * 100
+```

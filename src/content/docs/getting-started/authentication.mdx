@@ -1,0 +1,88 @@
+---
+title: "API Authentication & API Keys"
+description: "How to authenticate requests using JWT Bearer tokens or permanent X-API-Key headers."
+category: "Getting Started"
+order: 3
+tags: ["auth", "jwt", "api-key", "security"]
+tableOfContents: true
+---
+
+# API Authentication & API Keys
+
+The UltraFast Shortener API supports two secure authentication mechanisms:
+1. **JWT Bearer Token** &mdash; Ideal for session-based user dashboards.
+2. **Permanent API Key (`X-API-Key`)** &mdash; Ideal for microservices, backend cron jobs, and CI/CD pipelines.
+
+---
+
+## 1. User Registration & Login
+
+### Registering a New Account
+
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "developer@example.com",
+    "password": "SuperSecretPassword123"
+  }'
+```
+
+### Logging In & Receiving Tokens
+
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "developer@example.com",
+    "password": "SuperSecretPassword123"
+  }'
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "login successful",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "api_key": "ak_live_7f8a9e2d3c4b5a6",
+    "user": {
+      "id": 1,
+      "email": "developer@example.com"
+    }
+  }
+}
+```
+
+---
+
+## 2. Using Authentication in Requests
+
+Protected endpoints (such as listing your private links or rotating API keys) accept either header:
+
+### Method A: Using `X-API-Key` (Recommended for scripts)
+
+```bash
+curl -H "X-API-Key: ak_live_7f8a9e2d3c4b5a6" \
+  http://localhost:8080/api/v1/links
+```
+
+### Method B: Using `Authorization: Bearer <token>`
+
+```bash
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1Ni..." \
+  http://localhost:8080/api/v1/links
+```
+
+---
+
+## 3. Rotating API Keys
+
+If your API key is ever compromised, rotate it immediately:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/auth/api-key/regenerate \
+  -H "Authorization: Bearer <your_jwt_token>"
+```
