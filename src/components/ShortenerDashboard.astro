@@ -1,0 +1,433 @@
+---
+// UltraFast Link Shortener Interactive Dashboard Component
+---
+
+<section id="shortener" class="py-12 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white relative overflow-hidden">
+  <!-- Subtle Glow Effect -->
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute top-1/2 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <!-- Hero Title -->
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+        <span>Ultra-Fast Redirection Engine &bull; &lt;10ms SLA</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+        Shorten Links, <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Route Traffic</span> & Collect Telemetry
+      </h1>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Engineered with a 5-layer Go Clean Architecture, PostgreSQL persistence, and Redis in-memory caching. Supports Smart Device Routing, Country Geo-Targeting, and Webhooks.
+      </p>
+    </div>
+
+    <!-- Main Grid: Shortener on Left, Analytics on Right -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT: Shortener Form & Result (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+          <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-sky-400"></span>
+              <h2 class="text-lg font-bold text-white tracking-tight">Create Ultra-Fast Link</h2>
+            </div>
+            <div id="backendStatusBadge" class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[11px] font-medium border border-emerald-500/20">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>Backend Connected</span>
+            </div>
+          </div>
+
+          <form id="feShortenForm" class="space-y-4" onsubmit="handleFeCreateLink(event)">
+            <!-- Destination URL -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Destination URL <span class="text-sky-400">*</span></label>
+              <div class="relative">
+                <input type="url" id="feOriginalUrl" required placeholder="https://example.com/promotional-landing-page"
+                  class="w-full bg-slate-950/80 border border-slate-700/80 focus:border-sky-400 focus:ring-1 focus:ring-sky-400 px-4 py-3 rounded-xl text-sm text-white placeholder-slate-500 transition font-mono pr-20" />
+                <button type="button" onclick="fePasteUrl()" class="absolute right-2 top-2 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                  Paste
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Alias & Title -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Custom Alias (Optional)</label>
+                <div class="flex rounded-xl bg-slate-950/80 border border-slate-700/80 overflow-hidden">
+                  <span class="px-3 py-2.5 text-xs text-slate-500 bg-slate-900 select-none flex items-center font-mono">/</span>
+                  <input type="text" id="feCustomCode" placeholder="flash-sale" pattern="[a-zA-Z0-9_-]{3,30}"
+                    class="bg-transparent w-full px-3 py-2 text-sm text-white placeholder-slate-600 focus:outline-none font-mono" />
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Campaign Title</label>
+                <input type="text" id="feLinkTitle" placeholder="Black Friday Campaign"
+                  class="w-full bg-slate-950/80 border border-slate-700/80 focus:border-sky-400 focus:ring-1 focus:ring-sky-400 px-4 py-2.5 rounded-xl text-sm text-white placeholder-slate-600 transition" />
+              </div>
+            </div>
+
+            <!-- Accordion 1: Smart Routing (iOS, Android, Country) -->
+            <div class="pt-2">
+              <button type="button" onclick="feToggleSection('feRoutingSection', 'feRoutingIcon')" class="w-full flex items-center justify-between py-2 text-xs font-semibold text-slate-400 hover:text-sky-400 transition">
+                <span class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+                  </svg>
+                  <span>Smart Device Routing & Country Geo-Targeting</span>
+                </span>
+                <svg id="feRoutingIcon" class="w-4 h-4 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div id="feRoutingSection" class="hidden space-y-3 pt-3 border-t border-slate-800">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">iOS App Store URL</label>
+                    <input type="url" id="feIosUrl" placeholder="https://apps.apple.com/app/id..."
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                  </div>
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Android Play Store URL</label>
+                    <input type="url" id="feAndroidUrl" placeholder="https://play.google.com/store/apps/..."
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Country Code (ISO-2)</label>
+                    <input type="text" id="feCountryCode" placeholder="ID, US, SG" maxlength="2"
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono uppercase text-center" />
+                  </div>
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs text-slate-400 mb-1">Country Localized URL</label>
+                    <input type="url" id="feCountryUrl" placeholder="https://example.com/id/promo"
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accordion 2: Security, Expiry, Fallback & Webhook -->
+            <div>
+              <button type="button" onclick="feToggleSection('feAdvSection', 'feAdvIcon')" class="w-full flex items-center justify-between py-2 text-xs font-semibold text-slate-400 hover:text-sky-400 transition">
+                <span class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span>Fallback URL, Max Clicks, Password & Webhooks</span>
+                </span>
+                <svg id="feAdvIcon" class="w-4 h-4 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <div id="feAdvSection" class="hidden space-y-3 pt-3 border-t border-slate-800">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Password</label>
+                    <input type="password" id="fePassword" placeholder="Optional"
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600" />
+                  </div>
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Max Clicks Limit</label>
+                    <input type="number" id="feMaxClicks" min="1" placeholder="e.g. 500"
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                  </div>
+                  <div>
+                    <label class="block text-xs text-slate-400 mb-1">Expiry Date</label>
+                    <input type="datetime-local" id="feExpiresAt"
+                      class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs text-slate-400 mb-1">Custom Fallback URL (smooth redirect when limit/expiry is hit)</label>
+                  <input type="url" id="feFallbackUrl" placeholder="https://example.com/expired-landing"
+                    class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                </div>
+
+                <div>
+                  <label class="block text-xs text-slate-400 mb-1">Webhook URL (Discord / Slack / Telegram)</label>
+                  <input type="url" id="feWebhookUrl" placeholder="https://discord.com/api/webhooks/..."
+                    class="w-full bg-slate-950/80 border border-slate-700/60 px-3 py-2 rounded-lg text-xs text-white placeholder-slate-600 font-mono" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="feSubmitBtn" class="w-full py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-400 hover:to-indigo-500 transition shadow-lg shadow-sky-500/25 flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              <span>Shorten URL Now</span>
+            </button>
+          </form>
+
+          <!-- Result Box -->
+          <div id="feResultBox" class="hidden mt-6 p-5 rounded-xl bg-slate-950 border border-sky-500/40">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
+                <span>Shortlink Generated!</span>
+              </span>
+              <span id="feCreatedCodeBadge" class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300"></span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <div class="flex-1 w-full">
+                <input type="text" id="feShortUrlDisplay" readonly
+                  class="w-full px-3.5 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-sky-300 font-mono text-sm select-all" />
+                
+                <div class="flex items-center gap-2 mt-3">
+                  <button onclick="feCopyToClipboard()" id="feCopyBtn" class="px-4 py-2 rounded-lg text-xs font-semibold bg-sky-500 hover:bg-sky-400 text-white transition flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span id="feCopyBtnText">Copy Link</span>
+                  </button>
+                  <a id="feTestLinkBtn" href="#" target="_blank" class="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition">
+                    Visit Link &rarr;
+                  </a>
+                  <button onclick="feInspectCreated()" class="px-3 py-2 rounded-lg text-xs font-medium text-slate-400 hover:text-white bg-slate-800 transition">
+                    View Stats
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live QR Code -->
+              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-white p-1.5 flex-shrink-0 shadow-md">
+                <img id="feQrCodeImg" src="" alt="QR Code" class="w-full h-full object-contain" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Analytics Telemetry Explorer (5 cols) -->
+      <div id="analytics" class="lg:col-span-5 space-y-6">
+        <div class="bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+          <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <span class="w-3 h-3 rounded-full bg-emerald-400"></span>
+              <h2 class="text-lg font-bold text-white tracking-tight">Live Analytics Explorer</h2>
+            </div>
+            <span class="text-xs text-slate-400">PostgreSQL</span>
+          </div>
+
+          <div class="flex gap-2 mb-6">
+            <input type="text" id="feInspectCode" placeholder="Enter short code (e.g. flash-sale)"
+              class="flex-1 bg-slate-950/80 border border-slate-700/80 px-3.5 py-2 rounded-xl text-xs sm:text-sm text-white placeholder-slate-500 font-mono" />
+            <button type="button" onclick="feInspectAnalytics()" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 transition">
+              Inspect
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div id="feAnalyticsEmpty" class="text-center py-12 px-4 border border-dashed border-slate-800 rounded-xl">
+            <svg class="w-12 h-12 text-slate-600 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <p class="text-xs text-slate-400">Enter any shortcode above to inspect live click metrics, geographic distributions, and device logs.</p>
+          </div>
+
+          <!-- Analytics Content -->
+          <div id="feAnalyticsContent" class="hidden space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Total Clicks</span>
+                <span id="feStatTotalClicks" class="text-2xl font-extrabold text-white mt-1 block">0</span>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">Unique Visitors</span>
+                <span id="feStatUniqueVisitors" class="text-2xl font-extrabold text-sky-400 mt-1 block">0</span>
+              </div>
+            </div>
+
+            <!-- Device Breakdown -->
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+              <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2.5">Devices & Browsers</h3>
+              <div id="feDeviceList" class="space-y-2 text-xs"></div>
+            </div>
+
+            <!-- Country Breakdown -->
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+              <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2.5">Top Geographic Locations</h3>
+              <div id="feCountryList" class="space-y-2 text-xs"></div>
+            </div>
+
+            <!-- CSV Export button -->
+            <a id="feExportCsvBtn" href="#" target="_blank" class="w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>Download Click Telemetry (CSV)</span>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- System Quick Links -->
+        <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+          <span class="text-slate-400 font-medium">Developer Tools</span>
+          <div class="flex items-center gap-3">
+            <a href="http://localhost:8080/swagger/index.html" target="_blank" class="text-sky-400 hover:underline">Swagger UI</a>
+            <span class="text-slate-600">&bull;</span>
+            <a href="http://localhost:8080/metrics" target="_blank" class="text-amber-400 hover:underline">Metrics</a>
+            <span class="text-slate-600">&bull;</span>
+            <a href="http://localhost:8080/health" target="_blank" class="text-emerald-400 hover:underline">Health</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  const API_BASE = window.location.port === '4321' ? 'http://localhost:8080' : '';
+  let feLatestCode = '';
+
+  function feToggleSection(secId, iconId) {
+    const el = document.getElementById(secId);
+    const icon = document.getElementById(iconId);
+    if (el.classList.contains('hidden')) {
+      el.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+    } else {
+      el.classList.add('hidden');
+      icon.classList.remove('rotate-180');
+    }
+  }
+
+  async function fePasteUrl() {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) document.getElementById('feOriginalUrl').value = text;
+    } catch (e) {}
+  }
+
+  async function handleFeCreateLink(event) {
+    event.preventDefault();
+    const btn = document.getElementById('feSubmitBtn');
+    btn.disabled = true;
+    btn.innerText = 'Creating Shortlink...';
+
+    const payload = {
+      original_url: document.getElementById('feOriginalUrl').value.trim(),
+      custom_code: document.getElementById('feCustomCode').value.trim() || undefined,
+      title: document.getElementById('feLinkTitle').value.trim() || undefined,
+      ios_url: document.getElementById('feIosUrl').value.trim() || undefined,
+      android_url: document.getElementById('feAndroidUrl').value.trim() || undefined,
+      country_code: document.getElementById('feCountryCode').value.trim() || undefined,
+      country_url: document.getElementById('feCountryUrl').value.trim() || undefined,
+      password: document.getElementById('fePassword').value || undefined,
+      fallback_url: document.getElementById('feFallbackUrl').value.trim() || undefined,
+      webhook_url: document.getElementById('feWebhookUrl').value.trim() || undefined,
+    };
+
+    const maxClicks = document.getElementById('feMaxClicks').value;
+    if (maxClicks) payload.max_clicks = parseInt(maxClicks, 10);
+
+    const expiresAt = document.getElementById('feExpiresAt').value;
+    if (expiresAt) payload.expires_at = new Date(expiresAt).toISOString();
+
+    try {
+      const res = await fetch(API_BASE + '/api/v1/links/public', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert('Error: ' + (data.message || 'Failed to create shortlink'));
+        return;
+      }
+
+      const link = data.data;
+      feLatestCode = link.short_code;
+
+      document.getElementById('feCreatedCodeBadge').innerText = '/' + link.short_code;
+      document.getElementById('feShortUrlDisplay').value = link.short_url;
+      document.getElementById('feTestLinkBtn').href = link.short_url;
+      document.getElementById('feQrCodeImg').src = API_BASE + '/qr/' + link.short_code;
+      document.getElementById('feResultBox').classList.remove('hidden');
+
+      document.getElementById('feInspectCode').value = link.short_code;
+    } catch (err) {
+      alert('Network error connecting to Backend: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<svg class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>Shorten URL Now';
+    }
+  }
+
+  function feCopyToClipboard() {
+    const input = document.getElementById('feShortUrlDisplay');
+    input.select();
+    navigator.clipboard.writeText(input.value);
+    const txt = document.getElementById('feCopyBtnText');
+    txt.innerText = 'Copied!';
+    setTimeout(() => txt.innerText = 'Copy Link', 2000);
+  }
+
+  function feInspectCreated() {
+    if (feLatestCode) {
+      document.getElementById('feInspectCode').value = feLatestCode;
+      feInspectAnalytics();
+    }
+  }
+
+  async function feInspectAnalytics() {
+    const code = document.getElementById('feInspectCode').value.trim();
+    if (!code) {
+      alert('Please enter a short code');
+      return;
+    }
+
+    try {
+      const res = await fetch(API_BASE + '/api/v1/analytics/public/' + encodeURIComponent(code));
+      const data = await res.json();
+      if (!res.ok) {
+        alert('Analytics error: ' + (data.message || 'Not found'));
+        return;
+      }
+
+      const summary = data.data;
+      document.getElementById('feAnalyticsEmpty').classList.add('hidden');
+      document.getElementById('feAnalyticsContent').classList.remove('hidden');
+
+      document.getElementById('feStatTotalClicks').innerText = (summary.total_clicks || 0).toLocaleString();
+      document.getElementById('feStatUniqueVisitors').innerText = (summary.unique_clicks || 0).toLocaleString();
+
+      const devList = document.getElementById('feDeviceList');
+      devList.innerHTML = '';
+      if (summary.device_breakdown && summary.device_breakdown.length > 0) {
+        summary.device_breakdown.forEach(item => {
+          devList.innerHTML += '<div class="flex justify-between items-center py-1 border-b border-slate-800/40"><span class="text-slate-400 capitalize">' + (item.device_type || 'Unknown') + '</span><span class="font-mono font-bold text-slate-200">' + item.count + '</span></div>';
+        });
+      } else {
+        devList.innerHTML = '<span class="text-slate-500 text-xs">No click logs recorded yet</span>';
+      }
+
+      const countryList = document.getElementById('feCountryList');
+      countryList.innerHTML = '';
+      if (summary.country_breakdown && summary.country_breakdown.length > 0) {
+        summary.country_breakdown.forEach(item => {
+          countryList.innerHTML += '<div class="flex justify-between items-center py-1 border-b border-slate-800/40"><span class="text-slate-400">' + (item.country || 'Unknown') + '</span><span class="font-mono font-bold text-slate-200">' + item.count + '</span></div>';
+        });
+      } else {
+        countryList.innerHTML = '<span class="text-slate-500 text-xs">No geographical data yet</span>';
+      }
+
+      document.getElementById('feExportCsvBtn').href = API_BASE + '/api/v1/analytics/' + encodeURIComponent(code) + '/export.csv';
+    } catch (err) {
+      alert('Failed to connect to Analytics: ' + err.message);
+    }
+  }
+</script>
