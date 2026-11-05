@@ -1,8 +1,12 @@
 ---
-// UltraFast Link Shortener Interactive Dashboard Component
+import { SITE_CONFIG } from "../lib/site-config";
+const apiBase = SITE_CONFIG.links.apiBase;
+const swaggerUrl = SITE_CONFIG.links.swagger;
+const metricsUrl = SITE_CONFIG.links.metrics;
+const healthUrl = SITE_CONFIG.links.health;
 ---
 
-<section id="shortener" class="py-12 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white relative overflow-hidden">
+<section id="shortener" data-api-base={apiBase} class="py-12 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white relative overflow-hidden">
   <!-- Subtle Glow Effect -->
   <div class="absolute -top-32 -left-32 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
   <div class="absolute top-1/2 -right-32 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -275,11 +279,11 @@
         <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
           <span class="text-slate-400 font-medium">Developer Tools</span>
           <div class="flex items-center gap-3">
-            <a href="http://localhost:8080/swagger/index.html" target="_blank" class="text-sky-400 hover:underline">Swagger UI</a>
+            <a href={swaggerUrl} target="_blank" class="text-sky-400 hover:underline">Swagger UI</a>
             <span class="text-slate-600">&bull;</span>
-            <a href="http://localhost:8080/metrics" target="_blank" class="text-amber-400 hover:underline">Metrics</a>
+            <a href={metricsUrl} target="_blank" class="text-amber-400 hover:underline">Metrics</a>
             <span class="text-slate-600">&bull;</span>
-            <a href="http://localhost:8080/health" target="_blank" class="text-emerald-400 hover:underline">Health</a>
+            <a href={healthUrl} target="_blank" class="text-emerald-400 hover:underline">Health</a>
           </div>
         </div>
       </div>
@@ -289,7 +293,9 @@
 </section>
 
 <script is:inline>
-  const API_BASE = window.location.port === '4321' ? 'http://localhost:8080' : '';
+  const shortenerEl = document.getElementById('shortener');
+  const configuredApi = shortenerEl ? shortenerEl.getAttribute('data-api-base') : '';
+  const API_BASE = (configuredApi || (window.location.port === '4321' ? 'http://localhost:8080' : '')).replace(/\/+$/, '');
   let feLatestCode = '';
 
   function feToggleSection(secId, iconId) {

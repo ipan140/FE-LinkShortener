@@ -1,17 +1,8 @@
 {
-  "name": "supportgenix-docs",
-  "version": "1.1.0",
+  "name": "linkshort-fe",
+  "version": "1.0.0",
   "type": "module",
   "main": "index.js",
-  "workspaces": ["packages/*"],
-  "homepage": "https://github.com/supportgenix/supportgenix-docs",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/supportgenix/supportgenix-docs.git"
-  },
-  "bugs": {
-    "url": "https://github.com/supportgenix/supportgenix-docs/issues"
-  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -22,19 +13,14 @@
   },
   "keywords": [
     "astro",
-    "astro-component",
-    "withastro",
-    "astro-theme",
-    "documentation",
-    "knowledge-base",
-    "supportgenix",
-    "tailwindcss",
-    "mdx",
-    "pagefind"
+    "link-shortener",
+    "telemetry",
+    "redirector",
+    "tailwindcss"
   ],
-  "author": "SupportGenix",
-  "license": "ISC",
-  "description": "SupportGenix Docs is a modern Astro documentation and knowledge base theme with MDX content collections, Tailwind styling, and Pagefind search.",
+  "author": "UltraFast Engineering",
+  "license": "MIT",
+  "description": "UltraFast Link Shortener and Analytics Frontend built with Astro and Tailwind CSS.",
   "dependencies": {
     "@astrojs/alpinejs": "^0.5.0",
     "@astrojs/mdx": "^5.0.3",
