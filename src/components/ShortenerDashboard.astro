@@ -291,7 +291,7 @@ const healthUrl = SITE_CONFIG.links.health;
     </div>
 
     <!-- DOCUMENTATION & ARCHITECTURAL GUIDES SHOWCASE -->
-    <div id="docs-guide" class="mt-16 pt-12 border-t border-slate-800" x-data="docTabs()">
+    <div id="docs-guide" class="mt-16 pt-12 border-t border-slate-800" >
       <div class="text-center max-w-3xl mx-auto mb-10">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-3">
           <span>📚 Integrated System Documentation</span>
@@ -305,28 +305,23 @@ const healthUrl = SITE_CONFIG.links.health;
 
         <!-- Feature Guide Tabs -->
         <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
-          <button type="button" @click="activeDocTab = 'architecture'"
-            :class="activeDocTab === 'architecture' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+          <button type="button" onclick="feShowDocTab('architecture')" id="feDocTabBtn-architecture" class="fe-doc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer bg-sky-500 text-white shadow-lg shadow-sky-500/25"
             class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
             ⚡ &lt;10ms SLA & Redis
           </button>
-          <button type="button" @click="activeDocTab = 'routing'"
-            :class="activeDocTab === 'routing' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+          <button type="button" onclick="feShowDocTab('routing')" id="feDocTabBtn-routing" class="fe-doc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
             class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
             📱 Device & Geo Routing
           </button>
-          <button type="button" @click="activeDocTab = 'fallback'"
-            :class="activeDocTab === 'fallback' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+          <button type="button" onclick="feShowDocTab('fallback')" id="feDocTabBtn-fallback" class="fe-doc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
             class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
             🛡️ Fallback URL & Limits
           </button>
-          <button type="button" @click="activeDocTab = 'webhooks'"
-            :class="activeDocTab === 'webhooks' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+          <button type="button" onclick="feShowDocTab('webhooks')" id="feDocTabBtn-webhooks" class="fe-doc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
             class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
             🔔 Webhooks (Discord/Slack/TG)
           </button>
-          <button type="button" @click="activeDocTab = 'observability'"
-            :class="activeDocTab === 'observability' ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/25' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'"
+          <button type="button" onclick="feShowDocTab('observability')" id="feDocTabBtn-observability" class="fe-doc-tab-btn px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer bg-slate-900 text-slate-400 hover:text-white border border-slate-800"
             class="px-4 py-2 rounded-xl text-xs font-semibold transition cursor-pointer">
             📈 Prometheus & Swagger
           </button>
@@ -334,7 +329,7 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
       <!-- Tab 1: Architecture -->
-      <div x-show="activeDocTab === 'architecture'" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div id="feDocTabContent-architecture" class="fe-doc-tab-content bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">
             <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Ultra-Fast Redirection Engine</span>
@@ -380,7 +375,7 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
       <!-- Tab 2: Smart Routing -->
-      <div x-show="activeDocTab === 'routing'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div id="feDocTabContent-routing" class="fe-doc-tab-content hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">
             <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Smart Traffic Splitting</span>
@@ -419,7 +414,7 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
       <!-- Tab 3: Fallback & Limits -->
-      <div x-show="activeDocTab === 'fallback'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div id="feDocTabContent-fallback" class="fe-doc-tab-content hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">
             <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider block">Zero Broken Links</span>
@@ -450,7 +445,7 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
       <!-- Tab 4: Webhooks -->
-      <div x-show="activeDocTab === 'webhooks'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div id="feDocTabContent-webhooks" class="fe-doc-tab-content hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">
             <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider block">Automated Notifications</span>
@@ -489,7 +484,7 @@ const healthUrl = SITE_CONFIG.links.health;
       </div>
 
       <!-- Tab 5: Observability -->
-      <div x-show="activeDocTab === 'observability'" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+      <div id="feDocTabContent-observability" class="fe-doc-tab-content hidden bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6" style="display: none;" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">
             <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider block">Production Monitoring</span>
@@ -526,18 +521,15 @@ const healthUrl = SITE_CONFIG.links.health;
             <p class="text-xs text-slate-400">Integrate UltraFast Shortener into your frontend or backend workflow.</p>
           </div>
           <div class="flex items-center gap-2">
-            <button type="button" @click="activeSnippetTab = 'curl'"
-              :class="activeSnippetTab === 'curl' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+            <button type="button" onclick="feShowSnippetTab('curl')" id="feSnippetBtn-curl" class="fe-snippet-btn px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border bg-slate-800 text-sky-400 border-sky-500/50 transition cursor-pointer"
               class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
               cURL
             </button>
-            <button type="button" @click="activeSnippetTab = 'js'"
-              :class="activeSnippetTab === 'js' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+            <button type="button" onclick="feShowSnippetTab('js')" id="feSnippetBtn-js" class="fe-snippet-btn px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border border-transparent text-slate-500 hover:text-slate-300 transition cursor-pointer"
               class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
               JavaScript
             </button>
-            <button type="button" @click="activeSnippetTab = 'go'"
-              :class="activeSnippetTab === 'go' ? 'bg-slate-800 text-sky-400 border-sky-500/50' : 'text-slate-500 hover:text-slate-300 border-transparent'"
+            <button type="button" onclick="feShowSnippetTab('go')" id="feSnippetBtn-go" class="fe-snippet-btn px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border border-transparent text-slate-500 hover:text-slate-300 transition cursor-pointer"
               class="px-3 py-1.5 rounded-lg text-xs font-mono font-semibold border transition cursor-pointer">
               Go
             </button>
@@ -545,7 +537,7 @@ const healthUrl = SITE_CONFIG.links.health;
         </div>
 
         <!-- Snippet cURL -->
-        <div x-show="activeSnippetTab === 'curl'" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+        <div id="feSnippetContent-curl" class="fe-snippet-content font-mono text-xs text-slate-300 space-y-2 overflow-x-auto" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
           <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>curl -X POST http://localhost:8080/api/v1/links/public \
   -H "Content-Type: application/json" \
   -d '{
@@ -561,7 +553,7 @@ const healthUrl = SITE_CONFIG.links.health;
         </div>
 
         <!-- Snippet JS -->
-        <div x-show="activeSnippetTab === 'js'" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+        <div id="feSnippetContent-js" class="fe-snippet-content hidden font-mono text-xs text-slate-300 space-y-2 overflow-x-auto" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
           <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>const res = await fetch('http://localhost:8080/api/v1/links/public', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
@@ -576,7 +568,7 @@ console.log('Short URL:', data.short_url);</code></pre>
         </div>
 
         <!-- Snippet Go -->
-        <div x-show="activeSnippetTab === 'go'" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
+        <div id="feSnippetContent-go" class="fe-snippet-content hidden font-mono text-xs text-slate-300 space-y-2 overflow-x-auto" style="display: none;" class="font-mono text-xs text-slate-300 space-y-2 overflow-x-auto">
           <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800"><code>reqBody, _ := json.Marshal(map[string]any{
     "original_url": "https://example.com/checkout",
     "custom_code":  "flash-deal",
@@ -594,7 +586,38 @@ if err == nil {
 </section>
 
 <script is:inline>
-  function docTabs() {
+  
+  function feShowDocTab(tabName) {
+    document.querySelectorAll('.fe-doc-tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.fe-doc-tab-btn').forEach(btn => {
+      btn.classList.remove('bg-sky-500', 'text-white', 'shadow-lg', 'shadow-sky-500/25');
+      btn.classList.add('bg-slate-900', 'text-slate-400', 'border', 'border-slate-800');
+    });
+    const contentEl = document.getElementById('feDocTabContent-' + tabName);
+    if (contentEl) contentEl.classList.remove('hidden');
+    const btnEl = document.getElementById('feDocTabBtn-' + tabName);
+    if (btnEl) {
+      btnEl.classList.add('bg-sky-500', 'text-white', 'shadow-lg', 'shadow-sky-500/25');
+      btnEl.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
+    }
+  }
+
+  function feShowSnippetTab(lang) {
+    document.querySelectorAll('.fe-snippet-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.fe-snippet-btn').forEach(btn => {
+      btn.classList.remove('bg-slate-800', 'text-sky-400', 'border-sky-500/50');
+      btn.classList.add('text-slate-500', 'border-transparent');
+    });
+    const contentEl = document.getElementById('feSnippetContent-' + lang);
+    if (contentEl) contentEl.classList.remove('hidden');
+    const btnEl = document.getElementById('feSnippetBtn-' + lang);
+    if (btnEl) {
+      btnEl.classList.add('bg-slate-800', 'text-sky-400', 'border-sky-500/50');
+      btnEl.classList.remove('text-slate-500', 'border-transparent');
+    }
+  }
+
+function docTabs() {
     return {
       activeDocTab: 'architecture',
       activeSnippetTab: 'curl'
