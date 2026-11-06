@@ -99,74 +99,74 @@
                     detail: { reason },
                 }),
             );
+            console.info('Search fallback enabled:', reason);
+        },
+        async ensurePagefind() {
+            if (this.pagefindStatus === 'ready') return true;
+            if (this.pagefindStatus === 'unavailable') return false;
+            if (typeof window.pagefind !== 'undefined') {
+                this.pagefindStatus = 'ready';
+                return true;
+            }
+            try {
+                window.pagefind = await import('/pagefind/pagefind.js');
+                await window.pagefind.init();
+                this.pagefindStatus = 'ready';
+                return true;
+            } catch {
+                this.pagefindStatus = 'unavailable';
+                return false;
+            }
+        },
+        async runFallbackSearch(query, reason, requestId) {
+            const hasIndex = await this.ensureFallbackData();
+            if (requestId !== this.searchRequestId) return;
+            if (!hasIndex) {
+                this.results = [];
+                this.loading = false;
+                return;
+            }
+            this.reportFallback(reason);
+            this.results = this.fallbackSearch(query);
+            this.loading = false;
         },
         async search() {
-            const currentRequestId = ++this.searchRequestId;
-            const term = this.query.trim();
+            const requestId = ++this.searchRequestId;
+            this.open = true;
 
-            if (!term) {
+            const query = this.query.trim();
+            if (!query) {
                 this.results = [];
                 this.loading = false;
                 return;
             }
 
             this.loading = true;
+            const pagefindReady = await this.ensurePagefind();
+            if (requestId !== this.searchRequestId) return;
 
-            const useFallback = async (reason) => {
-                this.reportFallback(reason);
-                await this.ensureFallbackData();
-                if (currentRequestId !== this.searchRequestId) return;
-                this.results = this.fallbackSearch(term);
-                this.loading = false;
-            };
-
-            const pagefindAvailable =
-                typeof window !== 'undefined' &&
-                (typeof (window as any).pagefind !== 'undefined' ||
-                    this.pagefindStatus === 'ready');
-
-            if (!pagefindAvailable) {
-                await useFallback('pagefind_unavailable');
+            if (!pagefindReady) {
+                await this.runFallbackSearch(query, 'pagefind-unavailable', requestId);
                 return;
             }
 
             try {
-                const pagefind = (window as any).pagefind;
-                const searchResponse = await pagefind.search(term);
-                if (currentRequestId !== this.searchRequestId) return;
+                const found = await window.pagefind.search(query);
+                if (requestId !== this.searchRequestId) return;
 
-                const rawResults = Array.isArray(searchResponse?.results)
-                    ? searchResponse.results
-                    : [];
-
-                const settledResults = await Promise.all(
-                    rawResults.slice(0, 8).map(async (result: any) => {
-                        const data = await result.data();
-                        return {
-                            url: data.url,
-                            title: data.meta?.title || 'Documentation',
-                            excerpt: data.excerpt || '',
-                        };
-                    }),
+                const pagefindResults = await Promise.all(
+                    found.results.slice(0, 8).map((r) => r.data()),
                 );
+                if (requestId !== this.searchRequestId) return;
 
-                if (currentRequestId !== this.searchRequestId) return;
-
-                this.results = settledResults.map((item) => ({
-                    url: item.url,
-                    title: item.title,
-                    excerptText: item.excerpt
-                        .replace(/<mark[^>]*>/g, '')
-                        .replace(/<\/mark>/g, '')
-                        .replace(/&amp;/g, '&')
-                        .replace(/&lt;/g, '<')
-                        .replace(/&gt;/g, '>')
-                        .replace(/&quot;/g, '"')
-                        .replace(/&#39;/g, "'"),
+                this.results = pagefindResults.map((result) => ({
+                    url: result.url,
+                    title: result.meta?.title || 'Untitled',
+                    excerptText: result.excerpt?.replace(/<[^>]*>/g, '') || '',
                 }));
                 this.loading = false;
-            } catch (error) {
-                await useFallback('search_execution_error');
+            } catch {
+                await this.runFallbackSearch(query, 'pagefind-search-error', requestId);
             }
         },
         async searchFromButton() {
@@ -181,11 +181,11 @@
     }"
     @click.outside="open = false"
     @keydown.escape="open = false"
-    class="relative w-full max-w-[620px] mx-auto"
+    class="relative w-full max-w-[600px] mx-auto"
 >
     <div
-        class="flex items-center bg-slate-950/90 border border-slate-700/80 rounded-2xl p-1.5 transition-all duration-200 focus-within:border-sky-400 focus-within:ring-1 focus-within:ring-sky-400 shadow-xl"
-        :class="focused ? 'ring-1 ring-sky-400 border-sky-400' : ''"
+        class="flex items-center bg-white rounded-[12px] p-[6px] transition-all duration-200"
+        :style="focused ? 'box-shadow: var(--sgkb-search-focus-shadow); transform: translateY(-2px);' : ''"
     >
         <input
             x-ref="searchInput"
@@ -197,21 +197,23 @@
             @input="loading = query.trim().length > 0"
             @input.debounce.250ms="search()"
             @keydown.enter.prevent="searchFromButton()"
-            placeholder="Search docs (e.g. routing, webhooks, auth, telemetry)..."
-            class="w-full bg-transparent px-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none font-['Poppins']"
+            placeholder="Search for articles..."
+            class="w-full bg-transparent px-5 py-3 text-[var(--sgkb-text-tertiary)] font-normal placeholder:text-[var(--sgkb-text-tertiary)] placeholder:font-normal placeholder:opacity-100 outline-none font-['Poppins']"
+            style="font-size: var(--text-sm); line-height: var(--text-sm--line-height);"
         />
         <button
             type="button"
             @click="searchFromButton()"
-            class="flex items-center justify-center w-10 h-10 aspect-square shrink-0 bg-gradient-to-r from-sky-500 to-indigo-600 rounded-xl text-white hover:from-sky-400 hover:to-indigo-500 transition-all shadow-md shadow-sky-500/20 active:scale-95 cursor-pointer"
+            class="flex items-center justify-center w-[44px] h-[44px] min-w-[44px] min-h-[44px] aspect-square shrink-0 bg-[var(--sgkb-primary)] rounded-full text-white cursor-pointer"
+            style="transition: var(--sgkb-transition-base);"
             aria-label="Search"
         >
-            <span class="relative inline-flex w-4 h-4 items-center justify-center">
+            <span class="relative inline-flex w-5 h-5 items-center justify-center">
                 <svg
                     x-show="!loading"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -224,30 +226,25 @@
                 </svg>
                 <span
                     x-show="loading"
-                    class="inline-block w-4 h-4 rounded-full border-2 border-white/40 border-t-white animate-spin"
+                    class="inline-block w-5 h-5 rounded-full border-2 border-white/40 border-t-white animate-spin"
                     style="display: none;"
                 ></span>
             </span>
         </button>
     </div>
 
-    <!-- Search Dropdown Results -->
     <div
         x-show="open"
         x-transition
-        class="absolute left-0 right-0 mt-2 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden z-50 text-left"
+        class="absolute left-0 right-0 mt-2 bg-white rounded-xl border border-brand-gray-200 shadow-2xl overflow-hidden z-50"
         style="display:none;"
     >
-        <div class="px-4 py-3 border-b border-slate-800 flex items-center justify-between text-xs font-semibold tracking-wider text-slate-400 uppercase">
-            <span x-text="query.trim() ? 'Search Results' : 'Suggested Topics'"></span>
-            <span class="text-[10px] text-slate-500 lowercase">esc to close</span>
+        <div class="px-4 py-3 border-b border-brand-gray-100 text-center text-[12px] font-semibold tracking-widest text-brand-gray-400 uppercase">
+            <span x-text="query.trim() ? 'Search Results' : 'Popular Searches'"></span>
         </div>
 
-        <div class="max-h-[340px] overflow-y-auto">
-            <div x-show="loading" class="px-5 py-6 text-sm text-slate-400 flex items-center gap-3">
-                <span class="w-4 h-4 rounded-full border-2 border-sky-400 border-t-transparent animate-spin"></span>
-                <span>Searching technical documentation...</span>
-            </div>
+        <div class="max-h-[300px] overflow-y-auto">
+            <div x-show="loading" class="px-4 py-6 text-sm text-brand-gray-400">Searching...</div>
 
             <template x-if="!loading && !query.trim()">
                 <ul class="py-2">
@@ -256,13 +253,12 @@
                             <button
                                 type="button"
                                 @click="usePopular(term)"
-                                class="w-full text-left px-5 py-2.5 text-sm text-slate-300 hover:bg-slate-800 hover:text-white transition-colors cursor-pointer flex items-center justify-between"
+                                class="w-full text-left px-4 py-2.5 text-sm text-brand-gray-600 hover:bg-brand-gray-50 transition-colors cursor-pointer"
                             >
-                                <span class="inline-flex items-center gap-2.5">
-                                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                <span class="inline-flex items-center gap-2">
+                                    <span class="inline-block w-1.5 h-1.5 rounded-full bg-brand-gray-300"></span>
                                     <span x-text="term"></span>
                                 </span>
-                                <span class="text-xs text-slate-500">&rarr;</span>
                             </button>
                         </li>
                     </template>
@@ -270,15 +266,15 @@
             </template>
 
             <template x-if="!loading && query.trim() && results.length > 0">
-                <ul class="py-2 divide-y divide-slate-800/60">
+                <ul class="py-2 text-left">
                     <template x-for="result in results" :key="result.url">
                         <li>
                             <a
                                 :href="result.url"
-                                class="block px-5 py-3 hover:bg-slate-800/70 transition-colors"
+                                class="block px-4 py-3 hover:bg-brand-gray-50 transition-colors text-left"
                             >
-                                <p class="text-sm font-semibold text-white group-hover:text-sky-400" x-text="result.title"></p>
-                                <p class="text-xs text-slate-400 mt-1 line-clamp-1" x-text="result.excerptText"></p>
+                                <p class="text-sm font-semibold text-brand-gray-900 text-left" x-text="result.title"></p>
+                                <p class="text-xs text-brand-gray-500 mt-1 line-clamp-1 text-left" x-text="result.excerptText"></p>
                             </a>
                         </li>
                     </template>
@@ -287,9 +283,9 @@
 
             <div
                 x-show="!loading && query.trim() && results.length === 0"
-                class="px-5 py-8 text-center text-sm text-slate-400"
+                class="px-4 py-6 text-sm text-brand-gray-500"
             >
-                No technical docs matching "<span class="text-white" x-text="query"></span>" found.
+                No results found.
             </div>
         </div>
     </div>

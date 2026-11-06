@@ -169,17 +169,43 @@ const currentPath = Astro.url.pathname;
             </div>
 
             <nav class="flex flex-col gap-2">
-                {
-                    navItems.map((item) => (
-                        <a
-                            href={item.href}
-                            class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
-                            @click="mobileMenuOpen = false"
-                        >
-                            {item.name}
-                        </a>
-                    ))
-                }
+                <a
+                    href="/#shortener"
+                    class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                    @click="mobileMenuOpen = false"
+                >
+                    Shortener
+                </a>
+                <a
+                    href="/#analytics"
+                    class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                    @click="mobileMenuOpen = false"
+                >
+                    Live Analytics
+                </a>
+                <a
+                    href={links.swagger}
+                    target="_blank"
+                    class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                    @click="mobileMenuOpen = false"
+                >
+                    Swagger API
+                </a>
+                <a
+                    href={links.metrics}
+                    target="_blank"
+                    class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                    @click="mobileMenuOpen = false"
+                >
+                    Metrics
+                </a>
+                <a
+                    href={links.docsHome}
+                    class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                    @click="mobileMenuOpen = false"
+                >
+                    Docs
+                </a>
             </nav>
 
             <div class="mt-auto pt-6 border-t border-slate-800">
