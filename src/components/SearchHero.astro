@@ -1,4 +1,4 @@
-﻿---
+---
 import Search from "./Search.astro";
 
 interface Props {
@@ -14,43 +14,49 @@ const {
 } = Astro.props;
 ---
 
-<section class="relative overflow-visible bg-gradient-to-br from-[var(--sgkb-hero-from)] to-[var(--sgkb-hero-to)]">
-    <div
-        class="container-wide text-center text-white relative z-10 py-12 px-4 sm:px-0 sm:py-20"
-    >
-        <h1 class="font-['Poppins'] text-[1.75rem] sm:text-[clamp(2rem,5vw,2.75rem)] font-bold leading-[1.2] tracking-[-0.02em] mb-4">
-            Knowledge Base & API Guides
-        </h1>
-        <p class="font-['Poppins'] text-[0.95rem] sm:text-[clamp(1rem,2vw,1.25rem)] leading-[1.6] opacity-90 max-w-[600px] mx-auto px-4 sm:px-0 mb-10">
-            Search documentation for smart routing, webhook integrations, Prometheus metrics, and REST API endpoints
+<section class="relative overflow-hidden bg-gradient-to-b from-[#090d16] via-slate-950 to-[#090d16] border-y border-slate-800/80 text-white py-14 sm:py-20">
+    <!-- Subtle Ambient Glow -->
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="container-wide text-center relative z-10 px-4 sm:px-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold mb-5">
+            <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+            <span>Documentation &amp; Developer Guides</span>
+        </div>
+
+        <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+            Knowledge Base &amp; <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">API Guides</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto mb-8">
+            Explore deep technical guides on smart device routing, country geo-targeting, webhook payload delivery, Prometheus telemetry, and REST endpoints.
         </p>
 
-        <div class="max-w-[600px] mx-auto mb-6 px-4 sm:px-0">
+        <div class="max-w-2xl mx-auto mb-8">
             <Search />
         </div>
 
-        <div class="flex justify-center flex-wrap gap-3 sm:gap-6 mt-6 sm:mt-8 pt-6 sm:pt-8 px-4 sm:px-0 border-t border-white/15">
-            <div class="flex-1 sm:flex-none min-w-[90px] sm:min-w-[110px] px-4 sm:px-6 py-3 sm:py-[14px] rounded-xl bg-white/10 border border-white/15 text-center backdrop-blur-[10px]">
-                <div class="font-['Poppins'] text-[1.125rem] sm:text-[clamp(1.25rem,2.5vw,1.5rem)] font-semibold leading-[1.1]">
+        <div class="flex justify-center flex-wrap gap-4 pt-6 border-t border-slate-800/80 max-w-3xl mx-auto">
+            <div class="min-w-[120px] px-5 py-3 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-lg">
+                <div class="text-2xl font-extrabold text-white">
                     {articleCount}
                 </div>
-                <div class="font-['Poppins'] text-[10px] sm:text-[11px] uppercase tracking-[0.5px] font-medium opacity-80 mt-2">
-                    Articles
+                <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mt-1">
+                    Technical Docs
                 </div>
             </div>
-            <div class="flex-1 sm:flex-none min-w-[90px] sm:min-w-[110px] px-4 sm:px-6 py-3 sm:py-[14px] rounded-xl bg-white/10 border border-white/15 text-center backdrop-blur-[10px]">
-                <div class="font-['Poppins'] text-[1.125rem] sm:text-[clamp(1.25rem,2.5vw,1.5rem)] font-semibold leading-[1.1]">
+            <div class="min-w-[120px] px-5 py-3 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-lg">
+                <div class="text-2xl font-extrabold text-white">
                     {categoryCount}
                 </div>
-                <div class="font-['Poppins'] text-[10px] sm:text-[11px] uppercase tracking-[0.5px] font-medium opacity-80 mt-2">
+                <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mt-1">
                     Categories
                 </div>
             </div>
-            <div class="basis-full sm:basis-auto sm:min-w-[180px] px-4 sm:px-6 py-3 sm:py-[14px] rounded-xl bg-white/10 border border-white/15 text-center backdrop-blur-[10px]">
-                <div class="font-['Poppins'] text-[1.125rem] sm:text-[clamp(1.25rem,2.5vw,1.5rem)] font-semibold leading-[1.1]">
+            <div class="min-w-[150px] px-5 py-3 rounded-xl bg-slate-900/80 border border-slate-800 backdrop-blur-md shadow-lg">
+                <div class="text-2xl font-extrabold text-white">
                     {lastUpdatedLabel}
                 </div>
-                <div class="font-['Poppins'] text-[10px] sm:text-[11px] uppercase tracking-[0.5px] font-medium opacity-80 mt-2">
+                <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mt-1">
                     Last Updated
                 </div>
             </div>

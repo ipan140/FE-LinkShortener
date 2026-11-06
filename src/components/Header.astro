@@ -27,10 +27,10 @@ const currentPath = Astro.url.pathname;
     }"
 >
 <header
-    class="sticky top-0 z-50 w-full border-b border-brand-gray-200 bg-white transition-all duration-300"
-    :class="scrolled ? 'shadow-sm' : ''"
+    class="sticky top-0 z-50 w-full border-b border-slate-800 bg-[#090d16]/95 backdrop-blur-md transition-all duration-300"
+    :class="scrolled ? 'shadow-xl shadow-black/40 border-slate-800' : 'border-slate-800/80'"
 >
-    <div class="container-wide flex h-[100px] items-center justify-between">
+    <div class="container-wide flex h-[76px] items-center justify-between">
         <div class="flex items-center gap-10">
             <a
                 href="/"
@@ -39,7 +39,7 @@ const currentPath = Astro.url.pathname;
                 <Logo />
             </a>
 
-            <nav class="hidden lg:flex items-center gap-8">
+            <nav class="hidden lg:flex items-center gap-7">
                 {
                     navItems.map((navLink) => {
                         const isActive =
@@ -50,10 +50,10 @@ const currentPath = Astro.url.pathname;
                             <a
                                 href={navLink.href}
                                 class:list={[
-                                    "text-[18px] leading-none font-normal text-[var(--sgkb-header-nav)] transition-colors inline-flex items-center gap-1 whitespace-nowrap",
+                                    "text-[15px] font-medium transition-colors inline-flex items-center gap-1 whitespace-nowrap",
                                     isActive
-                                        ? "text-brand-gray-900"
-                                        : "hover:text-brand-gray-900",
+                                        ? "text-sky-400 font-semibold"
+                                        : "text-slate-300 hover:text-white",
                                 ]}
                                 target={
                                     navLink.href.startsWith("http")
@@ -74,19 +74,22 @@ const currentPath = Astro.url.pathname;
             </nav>
         </div>
 
-        <div class="flex items-center gap-6">
+        <div class="flex items-center gap-4">
             <a
-                href={links.github}
+                href={links.swagger}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="hidden sm:inline-flex items-center px-7 py-3 bg-primary text-white text-[18px] leading-none font-medium rounded-full hover:bg-primary-dark transition-all active:scale-95 whitespace-nowrap"
-            ><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>Backend Online</a>
+                class="hidden sm:inline-flex items-center px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-full hover:bg-emerald-500/20 transition-all active:scale-95 whitespace-nowrap"
+            >
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping mr-2"></span>
+                Backend Online
+            </a>
 
-                <button
-                    type="button"
-                    @click="mobileMenuOpen = true"
-                    class="lg:hidden p-2 text-brand-gray-600 hover:bg-brand-gray-100 rounded-lg transition-all active:scale-90 cursor-pointer"
-                    aria-label="Toggle Menu"
+            <button
+                type="button"
+                @click="mobileMenuOpen = true"
+                class="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-all active:scale-90 cursor-pointer"
+                aria-label="Toggle Menu"
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +127,7 @@ const currentPath = Astro.url.pathname;
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             @click="mobileMenuOpen = false"
-            class="absolute inset-0 bg-brand-gray-900/50 backdrop-blur-sm"
+            class="absolute inset-0 bg-black/70 backdrop-blur-sm"
         >
         </div>
 
@@ -136,77 +139,58 @@ const currentPath = Astro.url.pathname;
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="translate-x-full"
-            class="absolute inset-y-0 right-0 w-full max-w-xs bg-white shadow-2xl p-8 flex flex-col"
+            class="absolute inset-y-0 right-0 w-full max-w-xs bg-[#090d16] border-l border-slate-800 shadow-2xl p-7 flex flex-col text-slate-100"
         >
-            <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
                 <div class="origin-left scale-[0.9]">
                     <Logo />
                 </div>
                 <button
                     type="button"
                     @click="mobileMenuOpen = false"
-                    class="p-2 -mr-2 text-brand-gray-400 hover:text-brand-gray-900 bg-brand-gray-50 rounded-xl cursor-pointer"
+                    class="p-2 text-slate-400 hover:text-white bg-slate-800/80 rounded-xl cursor-pointer"
                     aria-label="Close menu"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
+                        width="20"
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         stroke-width="2.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        ><path d="M18 6 6 18"></path><path d="m6 6 12 12"
-                        ></path></svg
                     >
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
                 </button>
             </div>
 
             <nav class="flex flex-col gap-2">
-                <a
-                    href={links.home}
-                    class="px-4 py-3 text-base font-medium rounded-xl transition-all flex items-center justify-between group text-brand-gray-900 hover:bg-brand-gray-50 hover:text-primary"
-                    @click="mobileMenuOpen = false"
-                >
-                    Home
-                </a>
-                <a
-                    href={links.docsHome}
-                    class:list={[
-                        "px-4 py-3 text-base font-medium rounded-xl transition-all flex items-center justify-between group",
-                        currentPath.startsWith(links.docsHome) ? "bg-primary text-white" : "text-brand-gray-900 hover:bg-brand-gray-50 hover:text-primary",
-                    ]}
-                    @click="mobileMenuOpen = false"
-                >
-                    Docs
-                </a>
-                <a
-                    href={links.blog}
-                    class="px-4 py-3 text-base font-medium rounded-xl transition-all flex items-center justify-between group text-brand-gray-900 hover:bg-brand-gray-50 hover:text-primary"
-                    @click="mobileMenuOpen = false"
-                >
-                    Blog
-                </a>
-                <a
-                    href={links.contact}
-                    class="px-4 py-3 text-base font-medium rounded-xl transition-all flex items-center justify-between group text-brand-gray-900 hover:bg-brand-gray-50 hover:text-primary"
-                    @click="mobileMenuOpen = false"
-                >
-                    Contact
-                </a>
+                {
+                    navItems.map((item) => (
+                        <a
+                            href={item.href}
+                            class="px-4 py-3 text-sm font-medium rounded-xl transition-all flex items-center justify-between text-slate-300 hover:bg-slate-800/80 hover:text-white"
+                            @click="mobileMenuOpen = false"
+                        >
+                            {item.name}
+                        </a>
+                    ))
+                }
             </nav>
 
-            <div class="mt-auto pt-8 space-y-3 border-t border-brand-gray-100">
+            <div class="mt-auto pt-6 border-t border-slate-800">
                 <a
-                    href={links.github}
+                    href={links.swagger}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="block w-full py-3 bg-primary text-white text-center font-bold rounded-xl active:scale-95 transition-all"
+                    class="block w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-center font-semibold rounded-xl active:scale-95 transition-all text-sm shadow-lg shadow-sky-500/20"
                     @click="mobileMenuOpen = false"
                 >
-                    Get Started
+                    Open API Docs
                 </a>
             </div>
         </div>

@@ -67,21 +67,22 @@ const lastUpdatedLabel = articleData?.modifiedTime
 ---
 
 <Layout title={title} description={description} articleData={articleData}>
-    <header class="bg-[linear-gradient(90deg,var(--sgkb-primary)_0%,var(--sgkb-primary-light)_100%)] pt-[60px] pb-10 relative overflow-hidden">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,var(--sgkb-overlay-soft),transparent_55%)]"></div>
+    <!-- Top Header Banner (Dark Theme) -->
+    <header class="bg-gradient-to-b from-[#090d16] via-slate-950 to-[#090d16] border-b border-slate-800 pt-12 pb-10 relative overflow-hidden text-white">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.08),transparent_55%)] pointer-events-none"></div>
         <div class="container-wide relative z-10">
-            <nav aria-label="Breadcrumb" class="mb-6">
-                <ol class="flex flex-wrap items-center gap-x-2 gap-y-2 text-[14px] font-medium text-white/80">
+            <nav aria-label="Breadcrumb" class="mb-5">
+                <ol class="flex flex-wrap items-center gap-x-2 gap-y-2 text-xs sm:text-sm font-medium text-slate-400">
                     {
                         breadcrumbItems.map((item, index) => (
-                            <li class="inline-flex items-center gap-x-4">
-                                {index > 0 && <span class="text-white/45">/</span>}
+                            <li class="inline-flex items-center gap-x-2">
+                                {index > 0 && <span class="text-slate-600">/</span>}
                                 {item.href ? (
-                                    <a href={item.href} class="transition-colors hover:text-white">
+                                    <a href={item.href} class="transition-colors hover:text-sky-400">
                                         {item.label}
                                     </a>
                                 ) : (
-                                    <span class="text-white font-semibold">{item.label}</span>
+                                    <span class="text-sky-400 font-semibold">{item.label}</span>
                                 )}
                             </li>
                         ))
@@ -89,17 +90,17 @@ const lastUpdatedLabel = articleData?.modifiedTime
                 </ol>
             </nav>
             <h1
-                class="text-[clamp(2rem,4vw,3rem)] font-bold text-white mb-6 leading-[1.2] max-w-5xl"
+                class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight max-w-5xl tracking-tight"
             >
                 {title}
             </h1>
             <div
-                class="flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-white/90 font-medium"
+                class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-slate-400 font-medium"
             >
-                <div class="inline-flex items-center gap-2">
+                <div class="inline-flex items-center gap-1.5">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4 opacity-75"
+                        class="w-4 h-4 text-sky-400"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -116,11 +117,11 @@ const lastUpdatedLabel = articleData?.modifiedTime
                 {
                     articleData?.modifiedTime && (
                         <>
-                            <span class="text-white/45">&bull;</span>
-                            <div class="inline-flex items-center gap-2">
+                            <span class="text-slate-600">&bull;</span>
+                            <div class="inline-flex items-center gap-1.5">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="w-4 h-4 opacity-75"
+                                    class="w-4 h-4 text-sky-400"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
@@ -143,11 +144,11 @@ const lastUpdatedLabel = articleData?.modifiedTime
                         </>
                     )
                 }
-                <span class="text-white/45">&bull;</span>
-                <div class="inline-flex items-center gap-2">
+                <span class="text-slate-600">&bull;</span>
+                <div class="inline-flex items-center gap-1.5">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="w-4 h-4 opacity-75"
+                        class="w-4 h-4 text-indigo-400"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -168,7 +169,7 @@ const lastUpdatedLabel = articleData?.modifiedTime
     </header>
 
     <div
-        class="container-wide mt-[60px] mb-24 relative z-20"
+        class="container-wide mt-10 mb-20 relative z-20"
         x-data="{ sidebarOpen: false }"
     >
         <!-- Mobile Sidebar Backdrop -->
@@ -181,7 +182,7 @@ const lastUpdatedLabel = articleData?.modifiedTime
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
             @click="sidebarOpen = false"
-            class="fixed inset-0 bg-brand-gray-900/50 backdrop-blur-sm z-[60] lg:hidden"
+            class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] lg:hidden"
             style="display: none;"
         >
         </div>
@@ -195,46 +196,19 @@ const lastUpdatedLabel = articleData?.modifiedTime
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
-            class="fixed inset-y-0 left-0 w-80 bg-white shadow-2xl z-[70] lg:hidden p-8 overflow-y-auto"
+            class="fixed inset-y-0 left-0 w-80 bg-[#090d16] border-r border-slate-800 shadow-2xl z-[70] lg:hidden p-6 overflow-y-auto text-slate-100"
             style="display: none;"
         >
-            <div class="flex items-center justify-between mb-10">
+            <div class="flex items-center justify-between mb-8 pb-3 border-b border-slate-800">
                 <span
-                    class="text-sm font-black uppercase tracking-widest text-brand-gray-400"
+                    class="text-xs font-bold uppercase tracking-widest text-slate-400"
                     >Navigation</span
                 >
                 <button
                     type="button"
                     @click="sidebarOpen = false"
-                    class="p-2 -mr-2 text-brand-gray-400 hover:text-brand-gray-900"
+                    class="p-2 -mr-2 text-slate-400 hover:text-white bg-slate-800/60 rounded-xl"
                     aria-label="Close navigation panel"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        ><path d="M18 6 6 18"></path><path d="m6 6 12 12"
-                        ></path></svg
-                    >
-                </button>
-            </div>
-            <Sidebar currentSlug={currentSlug} />
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-6 lg:gap-[40px]">
-            <!-- Mobile Sidebar Toggle -->
-            <div class="lg:hidden mb-4">
-                <button
-                    type="button"
-                    @click="sidebarOpen = true"
-                    class="flex items-center gap-2 px-6 py-4 bg-white border border-brand-gray-200 rounded-2xl text-sm font-extrabold text-brand-gray-800 shadow-md active:scale-95 transition-all w-full justify-center"
-                    aria-label="Open documentation navigation"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -243,17 +217,46 @@ const lastUpdatedLabel = articleData?.modifiedTime
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        stroke-width="2.5"
+                        stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        ><rect width="18" height="18" x="3" y="3" rx="2"
-                        ></rect><path d="M9 3v18"></path></svg
                     >
-                    Documentation Menu
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <Sidebar currentSlug={currentSlug} />
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6 lg:gap-10">
+            <!-- Mobile Sidebar Toggle Button -->
+            <div class="lg:hidden mb-2">
+                <button
+                    type="button"
+                    @click="sidebarOpen = true"
+                    class="flex items-center gap-2 px-5 py-3.5 bg-slate-900 border border-slate-800 rounded-xl text-sm font-bold text-white shadow-md active:scale-95 transition-all w-full justify-center hover:border-sky-500/40"
+                    aria-label="Open documentation navigation"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                        <path d="M9 3v18"></path>
+                    </svg>
+                    Documentation Topics
                 </button>
             </div>
 
-            <!-- Left Sidebar -->
+            <!-- Left Sidebar (Desktop) -->
             <aside class="hidden lg:block lg:w-72 flex-shrink-0">
                 <div class="sticky top-24">
                     <Sidebar currentSlug={currentSlug} />
@@ -262,20 +265,20 @@ const lastUpdatedLabel = articleData?.modifiedTime
 
             <!-- Main Content Area -->
             <main
-                class="flex-grow min-w-0 bg-white rounded-2xl p-7 md:p-10 shadow-[var(--sgkb-shadow-xs-soft)] border border-brand-gray-200"
+                class="flex-grow min-w-0 bg-slate-900/80 backdrop-blur-md rounded-2xl p-6 sm:p-10 shadow-xl border border-slate-800 text-slate-100"
             >
                 <article
-                    class="prose prose-lg prose-sg max-w-none"
+                    class="prose prose-invert prose-sg max-w-none"
                     data-pagefind-body
                 >
                     <slot />
                 </article>
 
                 <!-- Feedback Section -->
-                <div class="mt-16 pt-8 border-t border-brand-gray-200">
+                <div class="mt-14 pt-8 border-t border-slate-800">
                     {
                         lastUpdatedLabel && (
-                            <div class="inline-flex items-center gap-2 text-[15px] font-medium text-brand-gray-500">
+                            <div class="inline-flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-400">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="16"
@@ -286,6 +289,7 @@ const lastUpdatedLabel = articleData?.modifiedTime
                                     stroke-width="2"
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
+                                    class="text-sky-400"
                                 >
                                     <path d="m12 3 2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.7 6.7 19.1l1-5.8L3.5 9.2l5.9-.9L12 3Z"></path>
                                 </svg>
@@ -295,7 +299,7 @@ const lastUpdatedLabel = articleData?.modifiedTime
                     }
 
                     <div
-                        class="mt-10 rounded-2xl bg-brand-gray-100 px-6 py-9 text-center"
+                        class="mt-8 rounded-2xl bg-slate-950/60 border border-slate-800 p-6 text-center"
                         x-data={`{
                             slug: ${JSON.stringify(currentSlug || "")},
                             vote: null,
@@ -324,18 +328,18 @@ const lastUpdatedLabel = articleData?.modifiedTime
                             }
                         }`}
                     >
-                        <h4 class="text-[20px] leading-[1.3] font-bold text-brand-gray-900 mb-5 m-0">
-                            Was this article helpful?
+                        <h4 class="text-base sm:text-lg font-bold text-white mb-4 m-0">
+                            Was this technical guide helpful?
                         </h4>
-                        <div class="flex justify-center gap-4">
+                        <div class="flex justify-center gap-3">
                             <button
                                 type="button"
                                 @click="submit('yes')"
                                 :disabled="saving"
-                                :class="vote === 'yes' ? 'border-primary text-primary bg-primary/10' : 'border-brand-gray-300 text-brand-gray-700 bg-white hover:border-primary hover:text-primary'"
-                                class="inline-flex items-center justify-center gap-2 min-w-[122px] h-[52px] px-5 text-[16px] leading-none font-medium rounded-xl border transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                                :class="vote === 'yes' ? 'border-sky-400 text-sky-400 bg-sky-500/10' : 'border-slate-700 text-slate-300 bg-slate-900 hover:border-sky-400 hover:text-white'"
+                                class="inline-flex items-center justify-center gap-2 min-w-[100px] h-[44px] px-4 text-sm font-semibold rounded-xl border transition-all cursor-pointer disabled:opacity-60"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                     <path d="M7 11V20M14.1223 20H8.90909C8.40701 20 8 19.5523 8 19V11C8 10.4477 8.40701 10 8.90909 10H11.8125L12.6448 5.00971C12.8086 4.02717 13.6004 3.29688 14.5545 3.29688V3.29688C15.7475 3.29688 16.6593 4.44876 16.3857 5.67631L15.5 10H19.2727C20.2268 10 21 10.8505 21 11.9C21 12.0249 20.9889 12.1492 20.9669 12.2717L19.7444 19.0717C19.5994 19.8795 18.928 20.4545 18.1364 20.4545H14.1223Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
                                 <span>Yes</span>
@@ -344,42 +348,38 @@ const lastUpdatedLabel = articleData?.modifiedTime
                                 type="button"
                                 @click="submit('no')"
                                 :disabled="saving"
-                                :class="vote === 'no' ? 'border-primary text-primary bg-primary/10' : 'border-brand-gray-300 text-brand-gray-700 bg-white hover:border-primary hover:text-primary'"
-                                class="inline-flex items-center justify-center gap-2 min-w-[122px] h-[52px] px-5 text-[16px] leading-none font-medium rounded-xl border transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                                :class="vote === 'no' ? 'border-sky-400 text-sky-400 bg-sky-500/10' : 'border-slate-700 text-slate-300 bg-slate-900 hover:border-sky-400 hover:text-white'"
+                                class="inline-flex items-center justify-center gap-2 min-w-[100px] h-[44px] px-4 text-sm font-semibold rounded-xl border transition-all cursor-pointer disabled:opacity-60"
                             >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                                     <path d="M17 13V4M9.87769 4H15.0909C15.593 4 16 4.44772 16 5V13C16 13.5523 15.593 14 15.0909 14H12.1875L11.3552 18.9903C11.1914 19.9728 10.3996 20.7031 9.44545 20.7031V20.7031C8.25254 20.7031 7.34074 19.5512 7.61427 18.3237L8.5 14H4.72727C3.77317 14 3 13.1495 3 12.1C3 11.9751 3.0111 11.8508 3.03313 11.7283L4.25562 4.92833C4.40061 4.12054 5.07198 3.54545 5.86364 3.54545H9.87769Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
                                 </svg>
                                 <span>No</span>
                             </button>
                         </div>
-                        <p class="m-0 mt-4 text-[13px] text-brand-gray-500">
-                            <span x-show="vote === null">Your response is saved on this device.</span>
+                        <p class="m-0 mt-3 text-xs text-slate-400">
+                            <span x-show="vote === null">Your feedback helps improve our technical documentation.</span>
                             <span x-show="vote !== null" x-text="`Thanks! You selected ${vote}.`"></span>
                         </p>
                     </div>
                 </div>
 
+                <!-- Navigation Previous / Next -->
                 {
                     (navigationData?.previous || navigationData?.next) && (
                         <nav
-                            class="mt-12 pt-10 border-t border-brand-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
+                            class="mt-10 pt-8 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4"
                             aria-label="Article Pagination"
                         >
                             {navigationData?.previous ? (
                                 <a
                                     href={navigationData.previous.href}
-                                    class="group block border border-brand-gray-200 rounded-xl px-6 py-5 bg-white hover:border-brand-gray-300 hover:shadow-[var(--sgkb-shadow-xs-soft)] hover:-translate-y-[1px] transition-all"
+                                    class="group block border border-slate-800 rounded-xl p-5 bg-slate-950/60 hover:border-sky-500/50 hover:bg-slate-900 transition-all"
                                 >
-                                    <span class="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.04em] font-bold text-brand-gray-500 mb-2">
-                                        <span class="transition-transform group-hover:-translate-x-[2px]">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                        Previous Article
+                                    <span class="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-semibold text-slate-400 mb-1.5 group-hover:text-sky-400">
+                                        &larr; Previous Article
                                     </span>
-                                    <p class="m-0 text-[16px] leading-[1.45] text-brand-gray-900 font-semibold">
+                                    <p class="m-0 text-sm sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
                                         {navigationData.previous.title}
                                     </p>
                                 </a>
@@ -390,17 +390,12 @@ const lastUpdatedLabel = articleData?.modifiedTime
                             {navigationData?.next && (
                                 <a
                                     href={navigationData.next.href}
-                                    class="group block border border-brand-gray-200 rounded-xl px-6 py-5 bg-white text-left md:text-right hover:border-brand-gray-300 hover:shadow-[var(--sgkb-shadow-xs-soft)] hover:-translate-y-[1px] transition-all"
+                                    class="group block border border-slate-800 rounded-xl p-5 bg-slate-950/60 text-left md:text-right hover:border-sky-500/50 hover:bg-slate-900 transition-all"
                                 >
-                                    <span class="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.04em] font-bold text-brand-gray-500 mb-2 md:justify-end w-full">
-                                        Next Article
-                                        <span class="transition-transform group-hover:translate-x-[2px]">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                                <path d="M5 12H19M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
+                                    <span class="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider font-semibold text-slate-400 mb-1.5 group-hover:text-sky-400 md:justify-end w-full">
+                                        Next Article &rarr;
                                     </span>
-                                    <p class="m-0 text-[16px] leading-[1.45] text-brand-gray-900 font-semibold">
+                                    <p class="m-0 text-sm sm:text-base font-bold text-white group-hover:text-sky-400 transition-colors">
                                         {navigationData.next.title}
                                     </p>
                                 </a>
@@ -408,7 +403,6 @@ const lastUpdatedLabel = articleData?.modifiedTime
                         </nav>
                     )
                 }
-
             </main>
 
             <!-- Right Sidebar (ToC) -->
@@ -422,31 +416,29 @@ const lastUpdatedLabel = articleData?.modifiedTime
                 )
             }
         </div>
-
     </div>
 
+    <!-- Related Articles -->
     {
         relatedArticles.length > 0 && (
-            <section class="mt-12 border-t border-brand-gray-200 bg-white pt-[60px] pb-[60px]">
+            <section class="border-t border-slate-800 bg-[#090d16] py-14">
                 <div class="container-wide">
-                    <h3 class="m-0 mb-8 text-[28px] font-semibold text-brand-gray-900 leading-[1.25]">
-                        Related Articles
+                    <h3 class="text-xl sm:text-2xl font-extrabold text-white mb-6 tracking-tight">
+                        Related Technical Guides
                     </h3>
-                    <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {relatedArticles.map((article) => (
-                            <article class="group rounded-xl border border-brand-gray-200 bg-white overflow-hidden min-h-[286px] transition-all hover:border-primary hover:shadow-[var(--sgkb-shadow-primary-soft)]">
-                                <a href={article.href} class="block p-6 min-h-[286px] text-inherit no-underline">
-                                    <h4 class="m-0 mb-3 text-[20px] leading-[1.35] font-semibold text-brand-gray-900 line-clamp-3">
+                            <article class="group rounded-2xl border border-slate-800 bg-slate-900/80 backdrop-blur-md p-6 transition-all hover:border-sky-500/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-sky-500/5">
+                                <a href={article.href} class="block">
+                                    <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-sky-400 transition-colors mb-2 line-clamp-2">
                                         {article.title}
                                     </h4>
-                                    <p class="m-0 mb-4 text-[14px] leading-[1.6] text-brand-gray-500 line-clamp-4">
+                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4 line-clamp-3">
                                         {article.description}
                                     </p>
-                                    <span class="inline-flex items-center gap-1.5 text-[14px] font-semibold text-primary">
-                                        Read more
-                                        <span class="transition-transform group-hover:translate-x-[2px]">
-                                            &rarr;
-                                        </span>
+                                    <span class="inline-flex items-center gap-1 text-xs sm:text-sm font-semibold text-sky-400 group-hover:text-sky-300">
+                                        <span>Read guide</span>
+                                        <span class="transition-transform group-hover:translate-x-1">&rarr;</span>
                                     </span>
                                 </a>
                             </article>
@@ -460,42 +452,43 @@ const lastUpdatedLabel = articleData?.modifiedTime
 
 <style is:global>
     .prose-sg {
-        --tw-prose-body: var(--sgkb-text-secondary);
-        --tw-prose-headings: var(--sgkb-text-primary);
-        --tw-prose-links: var(--sgkb-primary);
-        --tw-prose-bold: var(--sgkb-text-primary);
-        --tw-prose-counters: var(--sgkb-text-tertiary);
-        --tw-prose-bullets: var(--sgkb-text-tertiary);
-        --tw-prose-hr: var(--sgkb-border-light);
-        --tw-prose-quotes: var(--sgkb-text-primary);
-        --tw-prose-quote-borders: var(--sgkb-primary);
-        --tw-prose-captions: var(--sgkb-text-tertiary);
-        --tw-prose-code: var(--sgkb-primary);
-        --tw-prose-pre-code: var(--sgkb-bg-primary);
-        --tw-prose-pre-bg: var(--color-brand-gray-800);
-        --tw-prose-th-borders: var(--sgkb-border-light);
-        --tw-prose-td-borders: var(--sgkb-border-light);
-        font-size: 16px;
+        --tw-prose-body: #cbd5e1;
+        --tw-prose-headings: #f8fafc;
+        --tw-prose-links: #38bdf8;
+        --tw-prose-bold: #f8fafc;
+        --tw-prose-counters: #94a3b8;
+        --tw-prose-bullets: #38bdf8;
+        --tw-prose-hr: #1e293b;
+        --tw-prose-quotes: #e2e8f0;
+        --tw-prose-quote-borders: #0ea5e9;
+        --tw-prose-captions: #94a3b8;
+        --tw-prose-code: #38bdf8;
+        --tw-prose-pre-code: #e2e8f0;
+        --tw-prose-pre-bg: #090d16;
+        --tw-prose-th-borders: #1e293b;
+        --tw-prose-td-borders: #1e293b;
+        font-size: 15px;
         line-height: 1.75;
     }
 
     .prose-sg :where(h2, h3, h4):not(:where([class~="not-prose"] *)) {
         scroll-margin-top: 100px;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
+        color: #ffffff;
     }
 
     .prose-sg :where(h2):not(:where([class~="not-prose"] *)) {
-        font-size: 28px;
+        font-size: 1.65rem;
         line-height: 1.3;
         font-weight: 700;
         margin-top: 2.25rem;
         margin-bottom: 1rem;
-        border-bottom: 1px solid var(--color-brand-gray-200);
+        border-bottom: 1px solid #1e293b;
         padding-bottom: 0.75rem;
     }
 
     .prose-sg :where(h3):not(:where([class~="not-prose"] *)) {
-        font-size: 22px;
+        font-size: 1.35rem;
         line-height: 1.35;
         font-weight: 700;
         margin-top: 1.75rem;
@@ -503,7 +496,7 @@ const lastUpdatedLabel = articleData?.modifiedTime
     }
 
     .prose-sg :where(h4):not(:where([class~="not-prose"] *)) {
-        font-size: 19px;
+        font-size: 1.15rem;
         line-height: 1.4;
         font-weight: 700;
         margin-top: 1.5rem;
@@ -511,19 +504,20 @@ const lastUpdatedLabel = articleData?.modifiedTime
     }
 
     .prose-sg :where(p):not(:where([class~="not-prose"] *)) {
-        font-size: 16px;
+        font-size: 15px;
         line-height: 1.75;
         margin: 0 0 1.125rem 0;
+        color: #cbd5e1;
     }
 
     .prose-sg :where(a):not(:where([class~="not-prose"] *)) {
-        color: var(--sgkb-primary);
+        color: #38bdf8;
         text-decoration: none;
         font-weight: 600;
     }
 
     .prose-sg :where(a:hover):not(:where([class~="not-prose"] *)) {
-        color: var(--sgkb-primary-dark);
+        color: #7dd3fc;
         text-decoration: underline;
         text-underline-offset: 2px;
     }
@@ -535,45 +529,47 @@ const lastUpdatedLabel = articleData?.modifiedTime
 
     .prose-sg :where(li):not(:where([class~="not-prose"] *)) {
         margin: 0.35rem 0;
-        color: var(--color-brand-gray-700);
+        color: #cbd5e1;
     }
 
     .prose-sg :where(blockquote):not(:where([class~="not-prose"] *)) {
         margin: 1.75rem 0;
         padding: 1rem 1.25rem;
-        border-left: 4px solid var(--sgkb-primary);
-        background: var(--sgkb-quote-bg);
+        border-left: 4px solid #0ea5e9;
+        background: #0f172a;
         border-radius: 0.75rem;
-        color: var(--color-brand-gray-800);
+        color: #e2e8f0;
         font-style: normal;
     }
 
     .prose-sg :where(hr):not(:where([class~="not-prose"] *)) {
         margin: 2rem 0;
-        border-color: var(--color-brand-gray-200);
+        border-color: #1e293b;
     }
 
     .prose-sg :where(code):not(:where([class~="not-prose"] *)) {
-        background: var(--color-brand-gray-100);
-        color: var(--sgkb-success-text);
+        background: #0f172a;
+        color: #38bdf8;
         border-radius: 0.35rem;
         padding: 0.15rem 0.4rem;
         font-size: 0.9em;
         font-weight: 600;
+        border: 1px solid #1e293b;
     }
 
     .prose-sg :where(pre):not(:where([class~="not-prose"] *)) {
         border-radius: 1rem;
-        padding: 1.5rem;
-        box-shadow: var(--sgkb-shadow-code);
-        background-color: var(--sgkb-code-bg);
+        padding: 1.25rem;
+        background-color: #090d16;
+        border: 1px solid #1e293b;
         overflow-x: auto;
     }
 
     .prose-sg :where(pre code):not(:where([class~="not-prose"] *)) {
         background: transparent;
-        color: inherit;
+        color: #e2e8f0;
         padding: 0;
+        border: none;
     }
 
     .prose-sg :where(table):not(:where([class~="not-prose"] *)) {
@@ -585,104 +581,27 @@ const lastUpdatedLabel = articleData?.modifiedTime
     }
 
     .prose-sg :where(th):not(:where([class~="not-prose"] *)) {
-        background: var(--color-brand-gray-50);
-        color: var(--color-brand-gray-900);
+        background: #0f172a;
+        color: #f8fafc;
         font-weight: 600;
-        border: 1px solid var(--color-brand-gray-200);
+        border: 1px solid #1e293b;
         padding: 0.75rem 0.875rem;
         text-align: left;
         white-space: nowrap;
     }
 
     .prose-sg :where(td):not(:where([class~="not-prose"] *)) {
-        border: 1px solid var(--color-brand-gray-200);
+        border: 1px solid #1e293b;
         padding: 0.75rem 0.875rem;
-        color: var(--color-brand-gray-700);
+        color: #cbd5e1;
         vertical-align: top;
     }
 
     .prose-sg :where(img):not(:where([class~="not-prose"] *)) {
         max-width: 100%;
-        width: auto;
         height: auto;
-        border-radius: 0.5rem;
-        border: 1px solid var(--color-brand-gray-200);
-        margin: 1.25rem 0;
-        background: var(--sgkb-bg-primary);
-    }
-
-    .prose-sg :where(video, iframe):not(:where([class~="not-prose"] *)) {
-        width: 100%;
         border-radius: 0.75rem;
-        border: 1px solid var(--color-brand-gray-200);
+        border: 1px solid #1e293b;
         margin: 1.25rem 0;
-        background: var(--color-brand-gray-900);
-        aspect-ratio: 16 / 9;
-    }
-
-    .prose-sg :where(figure):not(:where([class~="not-prose"] *)) {
-        margin: 1.5rem 0;
-        border: none;
-        box-shadow: none;
-    }
-
-    .prose-sg :where(figcaption):not(:where([class~="not-prose"] *)) {
-        margin-top: 0.5rem;
-        font-size: 13px;
-        color: var(--color-brand-gray-500);
-        text-align: center;
-    }
-
-    .prose-sg :where(.sgkb-admonition):not(:where([class~="not-prose"] *)) {
-        display: flex;
-        gap: 0.875rem;
-        align-items: flex-start;
-        padding: 1rem 1rem;
-        margin: 1.5rem 0;
-        border-radius: 0.875rem;
-        border-width: 1px;
-    }
-
-    .prose-sg :where(.sgkb-admonition h5):not(:where([class~="not-prose"] *)) {
-        margin: 0 0 0.35rem 0;
-        font-size: 15px;
-        line-height: 1.35;
-        font-weight: 700;
-    }
-
-    .prose-sg :where(.sgkb-admonition p:last-child):not(:where([class~="not-prose"] *)) {
-        margin-bottom: 0;
-    }
-
-    .prose-sg :where(.sgkb-admonition-info):not(:where([class~="not-prose"] *)) {
-        background: var(--sgkb-info-bg);
-        border-color: var(--sgkb-info-border);
-        color: var(--sgkb-info-text);
-    }
-
-    .prose-sg :where(.sgkb-admonition-warning):not(:where([class~="not-prose"] *)) {
-        background: var(--sgkb-warning-bg);
-        border-color: var(--sgkb-warning-border);
-        color: var(--sgkb-warning-text);
-    }
-
-    .prose-sg :where(.sgkb-admonition-success):not(:where([class~="not-prose"] *)) {
-        background: var(--sgkb-success-bg);
-        border-color: var(--sgkb-success-border);
-        color: var(--sgkb-success-text);
-    }
-
-    .prose-sg :where(.sgkb-admonition-error):not(:where([class~="not-prose"] *)) {
-        background: var(--sgkb-error-bg);
-        border-color: var(--sgkb-error-border);
-        color: var(--sgkb-error-text);
-    }
-
-    .prose-sg :where(.sgkb-admonition-tip):not(:where([class~="not-prose"] *)) {
-        background: var(--sgkb-tip-bg);
-        border-color: var(--sgkb-tip-border);
-        color: var(--sgkb-tip-text);
     }
 </style>
-
-

@@ -7,11 +7,11 @@ const currentYear = new Date().getFullYear();
 const categories = await getCategories();
 
 const quickLinks = [
-  { name: "Home", href: SITE_CONFIG.links.home },
-  { name: "Documentation", href: SITE_CONFIG.links.docsHome },
-  { name: "About", href: SITE_CONFIG.links.about },
-  { name: "Blog", href: SITE_CONFIG.links.blog },
-  { name: "Contact", href: SITE_CONFIG.links.contact },
+  { name: "Link Shortener", href: "/#shortener" },
+  { name: "Live Telemetry", href: "/#analytics" },
+  { name: "REST API Docs", href: SITE_CONFIG.links.swagger },
+  { name: "Prometheus Metrics", href: SITE_CONFIG.links.metrics },
+  { name: "Knowledge Base", href: SITE_CONFIG.links.docsHome },
 ];
 
 const legalLinks = [
@@ -20,66 +20,53 @@ const legalLinks = [
 ];
 ---
 
-<footer class="bg-[var(--sgkb-footer-bg)] text-[var(--sgkb-footer-text)] pt-20 pb-8 font-inter text-[18px]">
+<footer class="bg-[#070a10] border-t border-slate-800 text-slate-400 pt-16 pb-12 font-['Poppins']">
   <div class="container-wide">
     <div
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.3fr_0.8fr_0.8fr_1fr] gap-10 lg:gap-14 mb-14"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 lg:gap-12 mb-12"
     >
       <!-- Brand Column -->
-      <div>
-        <div class="mb-5">
-          <Logo />
-        </div>
-        <p class="text-[var(--sgkb-footer-text)] text-[18px] leading-[1.55] mb-8 max-w-[34ch]">
-          Your go-to resource for guides, tutorials, and documentation.
-          Find answers quickly with our organized knowledge base and powerful search.
+      <div class="space-y-4">
+        <Logo />
+        <p class="text-slate-400 text-sm leading-relaxed max-w-sm">
+          Ultra-high-performance URL shortener with conditional routing, webhook notifications, and live Prometheus telemetry. Engineered with Go, PostgreSQL, and Redis.
         </p>
-        <div class="flex items-center gap-4">
-          <a
-            href={SITE_CONFIG.links.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit Twitter"
-            class="inline-flex items-center justify-center w-10 h-10 bg-brand-gray-100 text-brand-gray-600 rounded-full hover:bg-primary hover:text-white transition-all"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            ><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-          </a>
+        <div class="flex items-center gap-3 pt-2">
           <a
             href={SITE_CONFIG.links.github}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Visit GitHub"
-            class="inline-flex items-center justify-center w-10 h-10 bg-brand-gray-100 text-brand-gray-600 rounded-full hover:bg-primary hover:text-white transition-all"
+            aria-label="GitHub Repository"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-sky-500/40 hover:bg-slate-800 transition-all"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            ><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+          </a>
+          <a
+            href={SITE_CONFIG.links.swagger}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Swagger Documentation"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-sky-500/40 hover:bg-slate-800 transition-all text-xs font-mono font-bold"
+          >
+            API
           </a>
         </div>
       </div>
 
-      <!-- Documentation -->
+      <!-- Documentation Links -->
       <div>
-        <h3 class="text-[20px] leading-none font-[600] mb-6 text-[var(--sgkb-footer-heading)]">
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">
           Documentation
-        </h3>
-        <ul class="space-y-3">
+        </h4>
+        <ul class="space-y-2.5">
           {
             categories.map((category) => (
               <li>
                 <a
                   href={`/docs/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
-                  class="text-[18px] leading-[1.35] text-[var(--sgkb-footer-text)] hover:text-secondary-hover transition-colors"
+                  class="text-sm text-slate-400 hover:text-sky-400 transition-colors"
                 >
                   {category}
                 </a>
@@ -91,16 +78,16 @@ const legalLinks = [
 
       <!-- Quick Links -->
       <div>
-        <h3 class="text-[20px] leading-none font-[600] mb-6 text-[var(--sgkb-footer-heading)]">
-          Quick Links
-        </h3>
-        <ul class="space-y-3">
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">
+          Navigation
+        </h4>
+        <ul class="space-y-2.5">
           {
             quickLinks.map((link) => (
               <li>
                 <a
                   href={link.href}
-                  class="text-[18px] leading-[1.35] text-[var(--sgkb-footer-text)] hover:text-secondary-hover transition-colors"
+                  class="text-sm text-slate-400 hover:text-sky-400 transition-colors"
                 >
                   {link.name}
                 </a>
@@ -110,83 +97,45 @@ const legalLinks = [
         </ul>
       </div>
 
-      <!-- Newsletter & Legal -->
-      <div>
-        <div
-          class="bg-white border border-[var(--sgkb-footer-border)] rounded-2xl p-6 lg:min-w-[350px]"
-        >
-          <h3 class="text-[20px] leading-none font-[600] mb-6 text-[var(--sgkb-footer-heading)]">
-            Stay Updated
-          </h3>
-          <p class="text-[18px] text-[var(--sgkb-footer-text)] leading-[1.55] mb-6">
-            Subscribe to get notified about new articles, guides, and documentation updates.
-          </p>
-          {/*
-            Newsletter form. The submit button is disabled until you wire this up
-            to your provider (Mailchimp, ConvertKit, Buttondown, etc.).
-            Set the form `action` to your provider endpoint and use `method="post"`,
-            then remove the `disabled` attribute on the button below.
-          */}
-          <form class="relative mb-6" action="" method="post">
-            <label for="newsletter-email" class="sr-only">Email address</label>
-            <input
-              id="newsletter-email"
-              name="email"
-              type="email"
-              placeholder="Email Address"
-              autocomplete="email"
-              class="w-full h-12 pl-4 pr-14 bg-white border border-brand-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--sgkb-focus-ring)] focus:border-primary focus:shadow-[var(--sgkb-focus-shadow)] text-[18px] text-[var(--sgkb-footer-text)] placeholder:text-[var(--sgkb-footer-text)] transition-all"
-            />
-            <button
-              type="submit"
-              disabled
-              aria-label="Submit newsletter email"
-              title="Configure your newsletter provider in src/components/Footer.astro"
-              class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-[var(--sgkb-footer-btn-bg)] rounded-full flex items-center justify-center hover:bg-[var(--sgkb-footer-btn-bg-hover)] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="white"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><path d="m5 12 14 0"></path><path d="m12 5 7 7-7 7"
-                ></path></svg
-              >
-            </button>
-          </form>
-          <ul class="space-y-2">
-            {
-              legalLinks.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="text-[14px] text-[var(--sgkb-footer-text)] hover:text-secondary-hover transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
+      <!-- System Telemetry Badge Column -->
+      <div class="space-y-3">
+        <h4 class="text-sm font-bold text-white uppercase tracking-wider mb-4">
+          System Status
+        </h4>
+        <div class="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">Core Engine:</span>
+            <span class="text-emerald-400 font-semibold flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Operational
+            </span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">Target SLA:</span>
+            <span class="text-sky-400 font-mono font-semibold">&lt;10ms</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">Telemetry:</span>
+            <span class="text-indigo-400 font-mono font-semibold">Prometheus</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Bottom bar -->
-    <div class="pt-7 border-t border-[var(--sgkb-footer-bottom-border)] text-center">
-      <p class="text-[var(--sgkb-footer-text)] text-[18px]">
-        Copyright &copy; {currentYear}
-        <a
-          href={SITE_CONFIG.links.home}
-          class="text-[var(--sgkb-footer-text)] hover:text-secondary-hover font-semibold transition-colors"
-          >{SITE_CONFIG.organizationName}</a
-        >. All rights reserved.
-      </p>
+    <!-- Bottom Bar -->
+    <div
+      class="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500"
+    >
+      <p>&copy; {currentYear} UltraFast Redirector. All rights reserved.</p>
+      <div class="flex items-center gap-6">
+        {
+          legalLinks.map((link) => (
+            <a href={link.href} class="hover:text-slate-300 transition-colors">
+              {link.name}
+            </a>
+          ))
+        }
+      </div>
     </div>
   </div>
 </footer>

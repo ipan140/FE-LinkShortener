@@ -3,11 +3,10 @@ import { getDocsByCategory, getDocSlug, getDocUrl } from "../lib/docs";
 
 const categories = await getDocsByCategory();
 const categoryOrder = [
-    "Basic",
-    "Email Piping",
-    "Integration",
-    "Knowledge Base",
-    "FAQs",
+    "Getting Started",
+    "Features & Routing",
+    "Webhooks & Telemetry",
+    "API Reference",
 ];
 const sortedCategoryNames = Object.keys(categories).sort((a, b) => {
     const aIndex = categoryOrder.indexOf(a);
@@ -28,7 +27,7 @@ const activeCategory = sortedCategoryNames.find((category) =>
 );
 ---
 
-<div class="w-full rounded-2xl border border-[var(--sgkb-border-soft-muted)] bg-white overflow-hidden shadow-[var(--sgkb-shadow-xs)]">
+<div class="w-full rounded-2xl border border-slate-800 bg-slate-900/80 backdrop-blur-md overflow-hidden shadow-xl">
     <nav class="max-h-[calc(100vh-11rem)] overflow-y-auto custom-scrollbar no-scrollbar lg:no-scrollbar-off">
         {
             sortedCategoryNames.map((category, index) => {
@@ -38,11 +37,11 @@ const activeCategory = sortedCategoryNames.find((category) =>
                     : index === 0;
 
                 return (
-                    <details class="group/category border-b border-[var(--sgkb-border-soft)] last:border-b-0" open={isOpen}>
-                        <summary class="list-none cursor-pointer select-none px-4 py-4 flex items-center justify-between gap-3 text-brand-gray-700 hover:bg-brand-gray-50 transition-colors">
+                    <details class="group/category border-b border-slate-800/80 last:border-b-0" open={isOpen}>
+                        <summary class="list-none cursor-pointer select-none px-4 py-3.5 flex items-center justify-between gap-3 text-slate-200 hover:bg-slate-800/50 transition-colors">
                             <span class="inline-flex items-center gap-2.5 min-w-0">
                                 <svg
-                                    class="w-4 h-4 text-brand-gray-400 flex-shrink-0 transition-transform group-open/category:rotate-90"
+                                    class="w-4 h-4 text-sky-400 flex-shrink-0 transition-transform group-open/category:rotate-90"
                                     viewBox="0 0 20 20"
                                     fill="none"
                                     aria-hidden="true"
@@ -55,16 +54,16 @@ const activeCategory = sortedCategoryNames.find((category) =>
                                         stroke-linejoin="round"
                                     />
                                 </svg>
-                                <span class="text-[16px] leading-[1.35] font-semibold text-brand-gray-700">
+                                <span class="text-sm font-bold text-white">
                                     {category}
                                 </span>
                             </span>
-                            <span class="inline-flex items-center justify-center min-w-[30px] h-[30px] px-2 rounded-[10px] bg-brand-gray-100 text-brand-gray-400 text-[12px] font-semibold">
+                            <span class="inline-flex items-center justify-center min-w-[24px] h-[24px] px-1.5 rounded-full bg-slate-800 text-slate-400 text-xs font-semibold">
                                 {docs.length}
                             </span>
                         </summary>
 
-                        <ul class="bg-[var(--sgkb-surface-subtle)] py-1">
+                        <ul class="bg-slate-950/40 py-1 border-t border-slate-800/40">
                             {
                                 docs.map((doc) => {
                                     const isActive = currentSlug === getDocSlug(doc);
@@ -73,10 +72,10 @@ const activeCategory = sortedCategoryNames.find((category) =>
                                             <a
                                                 href={getDocUrl(doc)}
                                                 class:list={[
-                                                    "block px-5 py-3 text-[15px] leading-[1.45] transition-colors",
+                                                    "block px-5 py-2.5 text-sm leading-snug transition-colors",
                                                     isActive
-                                                        ? "bg-[var(--sgkb-surface-active)] text-primary border-l-[3px] border-primary pl-[17px] font-semibold"
-                                                        : "text-brand-gray-700 border-l-[3px] border-transparent hover:text-primary",
+                                                        ? "bg-sky-500/10 text-sky-400 border-l-[3px] border-sky-400 pl-[17px] font-semibold"
+                                                        : "text-slate-400 border-l-[3px] border-transparent hover:text-white hover:bg-slate-800/30",
                                                 ]}
                                             >
                                                 {doc.data.title}
@@ -119,10 +118,10 @@ const activeCategory = sortedCategoryNames.find((category) =>
         background: transparent;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: var(--color-brand-gray-200);
+        background: #1e293b;
         border-radius: 10px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: var(--color-brand-gray-300);
+        background: #334155;
     }
 </style>
